@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    Int            @id @default(autoincrement())
+  first_name            String         @default("First Name")
+  last_name             String?
+  phone_number          String         @default("081234567890")
+  second_phone_number   String?
+  avatar_url            String?
+  email                 String         @unique
+  password              String?
+  role                  Role?          @relation(fields: [role_id], references: [id])
+  role_id               Int?
+  gender                Gender         @relation(fields: [gender_id], references: [id])
+  gender_id             Int
+  created_at            DateTime       @default(now())
+  updated_at            DateTime?
+  deleted_at            DateTime?
+  cashier_transactions  Transaction[]  @relation("cashier_user")
+  customer_transactions Transaction[]  @relation("customer_user")
+  User_Address          User_Address[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User[]
+}
+
+model Gender {
+  id          Int    @id @default(autoincrement())
+  gender_name String
+  User        User[]
+}
+
+model Transaction {
+  id                 Int                  @id @default(autoincrement())
+  cashier            User                 @relation("cashier_user", fields: [cashier_id], references: [id])
+  cashier_id         Int                  @default(1)
+  user               User                 @relation("customer_user", fields: [user_id], references: [id])
+  user_id            Int                  @default(1)
+  total_price        Int
+  total_qty          Int
+  payment_method     Payment_Method       @relation(fields: [payment_method_id], references: [id])
+  payment_method_id  Int
+  payment_amount     Int
+  customer_name      String?
+  payment_change     Int?
+  total_price_ppn    Int?
+  transaction_detail Transaction_Detail[]
+  created_at         DateTime             @default(now())
+  updated_at         DateTime?
+  deleted_at         DateTime?
+}
+
+model Payment_Method {
+  id          Int           @id @default(autoincrement())
+  method_name String
+  transaction Transaction[]
+}
+
+model Transaction_Detail {
+  id             Int         @id @default(autoincrement())
+  transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  transaction_id Int
+  product        Product     @relation(fields: [product_id], references: [id])
+  product_id     Int
+  qty            Int
+  total_price    Int?
+  cart           Cart?       @relation(fields: [cart_id], references: [id])
+  cart_id        Int?
+}
+
+model Cart {
+  id                 Int                  @id @default(autoincrement())
+  customer_name      String
+  transaction_detail Transaction_Detail[]
+}
+
+model Product {
+  id                  Int                  @id @default(autoincrement())
+  product_name        String
+  product_category    Product_Category     @relation(fields: [product_category_id], references: [id])
+  product_category_id Int
+  product_price       Int
+  product_description String?
+  transaction_detail  Transaction_Detail[]
+  Product_Image       Product_Image[]
+}
+
+model Product_Image {
+  id         Int     @id @default(autoincrement())
+  image_url  String
+  product    Product @relation(fields: [product_id], references: [id])
+  product_id Int
+}
+
+model Product_Category {
+  id            Int                @id @default(autoincrement())
+  name          String             @default("Product Category")
+  parent        Product_Category?  @relation("ParentCategory", fields: [parent_id], references: [id])
+  parent_id     Int?
+  subcategories Product_Category[] @relation("ParentCategory")
+  products      Product[]
+}
+
+model Branch {
+  id          Int     @id @default(autoincrement())
+  branch_name String
+  stock       Stock[]
+}
+
+model Stock {
+  id         Int    @id @default(autoincrement())
+  branch     Branch @relation(fields: [branch_id], references: [id])
+  branch_id  Int
+  product_id Int
+  quantity   Int
+}
+
+model Status {
+  id          Int     @id @default(autoincrement())
+  status_name String?
+}
+
+model User_Address {
+  id      Int   @id @default(autoincrement())
+  user    User? @relation(fields: [user_id], references: [id])
+  user_id Int
+}
