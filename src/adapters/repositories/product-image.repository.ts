@@ -1,17 +1,17 @@
-import { PrismaClient, Product_Image } from '@prisma/client';
-import { IProductImageRepository } from '../../use-cases/interfaces/product-image/i.product-image.repository';
+import { PrismaClient } from '@prisma/client';
 import {
 	CreateProductImageProps,
 	DeleteProductImageProps,
-} from '../../use-cases/interfaces/product-image/i.product-image';
+	ProductImageUseCases,
+} from '../../use-cases/interfaces/product-image';
 import { ProductImage } from '../../entities/product-image';
 
-export class ProductImageRepository implements IProductImageRepository {
+export class ProductImageRepository implements ProductImageUseCases {
 	private prisma: PrismaClient;
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
-	async createProductImage(args: CreateProductImageProps): Promise<ProductImage | undefined> {
+	async create(args: CreateProductImageProps): Promise<ProductImage | undefined> {
 		try {
 			const res = await this.prisma.product_Image.create({ data: args });
 			return res;
@@ -19,7 +19,7 @@ export class ProductImageRepository implements IProductImageRepository {
 			throw error;
 		}
 	}
-	async deleteProductImage(args: DeleteProductImageProps): Promise<ProductImage | undefined> {
+	async delete(args: DeleteProductImageProps): Promise<ProductImage | undefined> {
 		throw new Error('Method not implemented.');
 	}
 }

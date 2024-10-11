@@ -45,9 +45,8 @@ export class ProductRepository implements ProductUseCases {
 			};
 
 			const newInclude = {
-				// status: true,
 				product_category: true,
-				// stock: {} as any,
+				product_image: true,
 			};
 
 			if (args.product_name) {

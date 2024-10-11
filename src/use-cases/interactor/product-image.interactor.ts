@@ -1,21 +1,20 @@
-import { Product_Image } from '@prisma/client';
 import {
 	CreateProductImageProps,
 	DeleteProductImageProps,
-} from '../interfaces/product-image/i.product-image';
-import { IProductImageInteractor } from '../interfaces/product-image/i.product-image.interactor';
-import { IProductImageRepository } from '../interfaces/product-image/i.product-image.repository';
+	ProductImageUseCases,
+} from '../interfaces/product-image';
 import { ProductImage } from '../../entities/product-image';
+import { ProductImageRepository } from '../../adapters/repositories/product-image.repository';
 
-export class ProductImageInteractor implements IProductImageInteractor {
-	private repository: IProductImageRepository;
-	constructor(repository: IProductImageRepository) {
+export class ProductImageInteractor implements ProductImageUseCases {
+	private repository: ProductImageRepository;
+	constructor(repository: ProductImageRepository) {
 		this.repository = repository;
 	}
 
 	async create(args: CreateProductImageProps): Promise<ProductImage | undefined> {
 		try {
-			const res = await this.repository.createProductImage(args);
+			const res = await this.repository.create(args);
 			return res;
 		} catch (error) {
 			throw error;
@@ -23,7 +22,7 @@ export class ProductImageInteractor implements IProductImageInteractor {
 	}
 	async delete(args: DeleteProductImageProps): Promise<ProductImage | undefined> {
 		try {
-			const res = await this.repository.deleteProductImage(args);
+			const res = await this.repository.delete(args);
 			return res;
 		} catch (error) {
 			throw error;

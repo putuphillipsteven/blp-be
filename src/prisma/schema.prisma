@@ -95,7 +95,7 @@ model Product {
   product_price       Int
   product_description String?
   transaction_detail  Transaction_Detail[]
-  Product_Image       Product_Image[]
+  product_image       Product_Image[]
 }
 
 model Product_Image {
