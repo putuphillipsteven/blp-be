@@ -23,9 +23,14 @@ export const verifyToken: any = (req: IVerifyTokenReq, res: Response, next: Next
 	}
 };
 
-export const checkRoleEmployee: any = (req: IVerifyTokenReq, res: Response, next: NextFunction) => {
+export const checkRoleEmployeeOrManager: any = (
+	req: IVerifyTokenReq,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
-		if (req.user.roleId == 2) {
+		const ROLE_ID = req.user.role_id;
+		if (ROLE_ID === 1 || ROLE_ID === 2) {
 			next();
 		} else {
 			return res.status(500).send('Unauthorized');

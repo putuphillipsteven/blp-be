@@ -2,37 +2,37 @@ import { Router } from 'express';
 
 const router = Router();
 
-const productCategoryRoute = require('./route/product-category.route');
-router.use('/product-categories', productCategoryRoute);
-
-const transactionRoute = require('./route/transaction.route');
-router.use('/transaction', transactionRoute);
-
-const authRoute = require('./route/authRoute');
-router.use('/auth', authRoute);
-
-const userRoute = require('./route/userRoute');
-router.use('/user', userRoute);
-
-const cartRoute = require('./route/cartRoute');
-router.use('/cart', cartRoute);
-
-const productRoute = require('./route/product.route');
+const productRoute = require('./drivers/routes/product.route');
 router.use('/products', productRoute);
 
-const productImageRoute = require('./route/product-image.route');
+const productCategoryRoute = require('./drivers/routes/product-category.route');
+router.use('/product-categories', productCategoryRoute);
+
+const transactionRoute = require('./drivers/routes/transaction.route');
+router.use('/transaction', transactionRoute);
+
+const authRoute = require('./drivers/routes/authRoute');
+router.use('/auth', authRoute);
+
+const userRoute = require('./drivers/routes/userRoute');
+router.use('/user', userRoute);
+
+const cartRoute = require('./drivers/routes/cartRoute');
+router.use('/cart', cartRoute);
+
+const productImageRoute = require('./drivers/routes/product-image.route');
 router.use('/product-images', productImageRoute);
 
-const branchRoute = require('./route/branchRoute');
+const branchRoute = require('./drivers/routes/branchRoute');
 router.use('/branch', branchRoute);
 
-const statusRoute = require('./route/statusRoute');
+const statusRoute = require('./drivers/routes/statusRoute');
 router.use('/status', statusRoute);
 
-const profileRoute = require('./route/profileImageRoute');
+const profileRoute = require('./drivers/routes/profileImageRoute');
 router.use('/profile', profileRoute);
 
-const stockRoute = require('./route/stockRoute');
+const stockRoute = require('./drivers/routes/stockRoute');
 router.use('/stock', stockRoute);
 
 export default router;
