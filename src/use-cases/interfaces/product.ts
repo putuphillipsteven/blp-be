@@ -3,16 +3,18 @@ import { Product } from '../../entities/product';
 
 export interface ProductUseCases {
 	get(args: GetProductFilterProps): Promise<GetProductReturnProps | undefined>;
+	getDetails(args: GetProductDetailsProps): Promise<Product | null>;
 	create(args: CreateProductProps): Promise<Product | undefined>;
 	update(args: UpdateProductProps): Promise<Product | undefined>;
 	delete(args: DeleteProductProps): Promise<Product | undefined>;
 }
 
 export interface IProductController {
-	onDeleteProduct(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	onGetProduct(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	onUpdateProduct(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	onCreateProduct(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	get(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	update(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	create(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 }
 
 export interface CreateProductProps extends Product {}
@@ -28,6 +30,10 @@ export interface GetProductFilterProps {
 	page: number;
 	sort: string;
 	stock: number;
+}
+
+export interface GetProductDetailsProps {
+	id: number;
 }
 
 export interface GetProductReturnProps {

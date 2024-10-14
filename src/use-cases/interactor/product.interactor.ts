@@ -3,6 +3,7 @@ import { Product } from '../../entities/product';
 import {
 	CreateProductProps,
 	DeleteProductProps,
+	GetProductDetailsProps,
 	GetProductFilterProps,
 	GetProductReturnProps,
 	ProductUseCases,
@@ -14,6 +15,14 @@ export class ProductInteractor implements ProductUseCases {
 
 	constructor(repository: ProductRepository) {
 		this.repository = repository;
+	}
+	async getDetails(args: GetProductDetailsProps): Promise<Product | null> {
+		try {
+			const res = await this.repository.getDetails(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async delete(args: DeleteProductProps): Promise<Product | undefined> {

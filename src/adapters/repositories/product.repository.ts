@@ -3,6 +3,7 @@ import { Product } from '../../entities/product';
 import {
 	CreateProductProps,
 	DeleteProductProps,
+	GetProductDetailsProps,
 	GetProductFilterProps,
 	GetProductReturnProps,
 	ProductUseCases,
@@ -14,6 +15,22 @@ export class ProductRepository implements ProductUseCases {
 
 	constructor() {
 		this.prisma = new PrismaClient();
+	}
+	async getDetails(args: GetProductDetailsProps): Promise<Product | null> {
+		try {
+			const res = await this.prisma.product.findFirst({
+				where: {
+					id: args.id,
+				},
+				include: {
+					product_category: true,
+					product_image: true,
+				},
+			});
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 	// Delete Product
 	async delete(args: DeleteProductProps): Promise<Product | undefined> {

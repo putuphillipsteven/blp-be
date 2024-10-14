@@ -15,8 +15,18 @@ export class ProductController implements IProductController {
 	constructor(interactor: ProductInteractor) {
 		this.interactor = interactor;
 	}
+	async getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+			const args = { id: Number(id) };
+			const data = await this.interactor.getDetails(args);
+			return sendResponse(res, 200, 'Get Product Details Success', data);
+		} catch (error) {
+			next(error);
+		}
+	}
 
-	async onDeleteProduct(req: Request, res: Response, next: NextFunction) {
+	async delete(req: Request, res: Response, next: NextFunction) {
 		try {
 			const { id } = req.params;
 			const args: DeleteProductProps = {
@@ -29,7 +39,7 @@ export class ProductController implements IProductController {
 		}
 	}
 
-	async onGetProduct(req: Request, res: Response, next: NextFunction) {
+	async get(req: Request, res: Response, next: NextFunction) {
 		try {
 			const { page, pageSize, product_category_id, product_name, sort, stock } =
 				req.query as ParsedQs & GetProductFilterProps;
@@ -48,7 +58,7 @@ export class ProductController implements IProductController {
 		}
 	}
 
-	async onUpdateProduct(req: Request, res: Response, next: NextFunction) {
+	async update(req: Request, res: Response, next: NextFunction) {
 		try {
 			const { id } = req.params;
 
@@ -64,7 +74,7 @@ export class ProductController implements IProductController {
 		}
 	}
 
-	async onCreateProduct(req: Request, res: Response, next: NextFunction) {
+	async create(req: Request, res: Response, next: NextFunction) {
 		try {
 			const data = await this.interactor.create({
 				...req.body,

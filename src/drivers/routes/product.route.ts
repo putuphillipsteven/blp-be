@@ -23,26 +23,27 @@ const updateProductValidations = [
 	body('product_price').isInt({ min: 100 }).withMessage('Product price cant 100 rupiah').optional(),
 ];
 
-router.get('/', controller.onGetProduct.bind(controller));
+router.get('/', controller.get.bind(controller));
+router.get('/:id', controller.getDetails.bind(controller));
 router.post(
 	'/create',
 	verifyToken,
 	checkRoleEmployeeOrManager,
 	validator(createProductValidations),
-	controller.onCreateProduct.bind(controller),
+	controller.create.bind(controller),
 );
 router.patch(
 	'/update/:id',
 	verifyToken,
 	checkRoleEmployeeOrManager,
 	validator(updateProductValidations),
-	controller.onUpdateProduct.bind(controller),
+	controller.update.bind(controller),
 );
 router.delete(
 	'/delete/:id',
 	verifyToken,
 	checkRoleEmployeeOrManager,
-	controller.onDeleteProduct.bind(controller),
+	controller.delete.bind(controller),
 );
 
 export = router;
