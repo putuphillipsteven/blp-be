@@ -5,14 +5,24 @@ import {
 	UpdateProductCategoryProps,
 	DeleteProductCategoryProps,
 	ProductCategoryUseCases,
+	GetProductDetailsProps,
 } from '../interfaces/product-category';
 import { ProductCategoryRepository } from '../../adapters/repositories/product-category.repository';
+import { ProductCategory } from '../../entities/product-category';
 
 export class ProductCategoryInteractor implements ProductCategoryUseCases {
 	private repository: ProductCategoryRepository;
 
 	constructor(repository: ProductCategoryRepository) {
 		this.repository = repository;
+	}
+	async getDetails(args: GetProductDetailsProps): Promise<any | null> {
+		try {
+			const res = await this.repository.getDetails(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async get(): Promise<GetProductCategoryReturnProps | undefined> {

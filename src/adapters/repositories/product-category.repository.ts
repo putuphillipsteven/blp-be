@@ -5,6 +5,7 @@ import {
 	UpdateProductCategoryProps,
 	DeleteProductCategoryProps,
 	ProductCategoryUseCases,
+	GetProductDetailsProps,
 } from '../../use-cases/interfaces/product-category';
 import { ProductCategory } from '../../entities/product-category';
 
@@ -13,6 +14,17 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 
 	constructor() {
 		this.prisma = new PrismaClient();
+	}
+	async getDetails(args: GetProductDetailsProps): Promise<any | null> {
+		try {
+			const res = await this.get();
+			const { id } = args;
+			return res?.data.find((result) => {
+				return result.id === id;
+			});
+		} catch (error) {
+			throw error;
+		}
 	}
 	async create(args: CreateProductCategoryProps): Promise<ProductCategory | undefined> {
 		try {

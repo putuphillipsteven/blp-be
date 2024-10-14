@@ -8,6 +8,16 @@ export class ProductCategoryController implements IProductCategoryController {
 	constructor(interactor: ProductCategoryInteractor) {
 		this.interactor = interactor;
 	}
+	async getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+			const args = { id: Number(id) };
+			const data = await this.interactor.getDetails(args);
+			return sendResponse(res, 200, 'Get Product Category Details Success', data);
+		} catch (error) {
+			throw error;
+		}
+	}
 	async delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
