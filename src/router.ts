@@ -29,9 +29,6 @@ router.use('/branch', branchRoute);
 const statusRoute = require('./drivers/routes/statusRoute');
 router.use('/status', statusRoute);
 
-const profileRoute = require('./drivers/routes/profileImageRoute');
-router.use('/profile', profileRoute);
-
 const stockRoute = require('./drivers/routes/stockRoute');
 router.use('/stock', stockRoute);
 

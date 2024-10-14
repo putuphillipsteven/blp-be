@@ -114,20 +114,6 @@ model Product_Category {
   products      Product[]
 }
 
-model Branch {
-  id          Int     @id @default(autoincrement())
-  branch_name String
-  stock       Stock[]
-}
-
-model Stock {
-  id         Int    @id @default(autoincrement())
-  branch     Branch @relation(fields: [branch_id], references: [id])
-  branch_id  Int
-  product_id Int
-  quantity   Int
-}
-
 model Status {
   id          Int     @id @default(autoincrement())
   status_name String?
