@@ -66,8 +66,44 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 	}
 
 	async update(args: UpdateProductCategoryProps): Promise<Product_Category | undefined> {
-		throw new Error('Method not implemented.');
+		try {
+			const { id, name, parent_id } = args;
+
+			const checkChildren = async () => {
+				const res = await this.prisma.product_Category.findMany({
+					where: {
+						parent_id: id,
+					},
+				});
+				if (res) {
+					return true;
+				} else {
+					return false;
+				}
+			};
+
+			console.log(await checkChildren());
+			const toBeUpdated: any = {};
+			if (name) toBeUpdated.name = name;
+			if (parent_id && parent_id !== null) {
+				if (await checkChildren()) {
+					throw new Error('This product category have children, cant change the parent_id');
+				}
+				toBeUpdated.parent_id = parent_id;
+			}
+
+			const res = await this.prisma.product_Category.update({
+				where: {
+					id,
+				},
+				data: toBeUpdated,
+			});
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
+
 	async delete(args: DeleteProductCategoryProps): Promise<Product_Category | undefined> {
 		throw new Error('Method not implemented.');
 	}

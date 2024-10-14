@@ -7,7 +7,6 @@ import {
 	ProductCategoryUseCases,
 } from '../interfaces/product-category';
 import { ProductCategoryRepository } from '../../adapters/repositories/product-category.repository';
-import { ProductUseCases } from '../interfaces/product';
 
 export class ProductCategoryInteractor implements ProductCategoryUseCases {
 	private repository: ProductCategoryRepository;
@@ -33,7 +32,12 @@ export class ProductCategoryInteractor implements ProductCategoryUseCases {
 		}
 	}
 	async update(args: UpdateProductCategoryProps): Promise<Product_Category | undefined> {
-		throw new Error('Method not implemented.');
+		try {
+			const res = await this.repository.update(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 	async delete(args: DeleteProductCategoryProps): Promise<Product_Category | undefined> {
 		throw new Error('Method not implemented.');

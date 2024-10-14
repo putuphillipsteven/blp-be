@@ -9,7 +9,8 @@ const controller = new ProductCategoryController(interactor);
 
 const router = express.Router();
 
-router.get('/', controller.onGetProductCategory.bind(controller));
-router.post('/create', controller.onCreateProductCategory.bind(controller));
+router.get('/', controller.get.bind(controller));
+router.post('/create', controller.create.bind(controller));
+router.patch('/:id', controller.update.bind(controller));
 
 export = router;

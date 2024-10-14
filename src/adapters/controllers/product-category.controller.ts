@@ -8,11 +8,21 @@ export class ProductCategoryController implements IProductCategoryController {
 	constructor(interactor: ProductCategoryInteractor) {
 		this.interactor = interactor;
 	}
-	async onGetProductCategory(
-		req: Request,
-		res: Response,
-		next: NextFunction,
-	): Promise<any | undefined> {
+	async update(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+
+			const { name, parent_id } = req.body;
+
+			const argsToUpdate: any = { id: Number(id), name, parent_id: Number(parent_id) };
+
+			const data = await this.interactor.update(argsToUpdate);
+			return sendResponse(res, 200, 'Update Product Category Success', data);
+		} catch (error) {
+			next(error);
+		}
+	}
+	async get(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const data = await this.interactor.get();
 			return sendResponse(res, 200, 'Get Product Category Success', data);
@@ -21,11 +31,7 @@ export class ProductCategoryController implements IProductCategoryController {
 		}
 	}
 
-	async onCreateProductCategory(
-		req: Request,
-		res: Response,
-		next: NextFunction,
-	): Promise<any | undefined> {
+	async create(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const data = await this.interactor.create({
 				...req.body,

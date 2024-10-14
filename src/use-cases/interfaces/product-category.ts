@@ -2,12 +2,9 @@ import { ProductCategory } from '../../entities/product-category';
 import { NextFunction, Request, Response } from 'express';
 
 export interface IProductCategoryController {
-	onGetProductCategory(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	onCreateProductCategory(
-		req: Request,
-		res: Response,
-		next: NextFunction,
-	): Promise<any | undefined>;
+	get(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	create(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	update(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 }
 
 export interface ProductCategoryUseCases {
@@ -25,7 +22,8 @@ export interface DeleteProductCategoryProps {
 
 export interface UpdateProductCategoryProps {
 	id: number;
-	product_category_name: string;
+	name: string;
+	parent_id?: number | null;
 }
 
 export interface GetProductCategoryReturnProps {
