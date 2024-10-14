@@ -11,7 +11,7 @@ router.use('/product-categories', productCategoryRoute);
 const transactionRoute = require('./drivers/routes/transaction.route');
 router.use('/transaction', transactionRoute);
 
-const authRoute = require('./drivers/routes/authRoute');
+const authRoute = require('./drivers/routes/auth.route');
 router.use('/auth', authRoute);
 
 const userRoute = require('./drivers/routes/userRoute');
