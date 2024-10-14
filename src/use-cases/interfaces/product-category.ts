@@ -5,6 +5,7 @@ export interface IProductCategoryController {
 	get(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 	create(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 	update(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 }
 
 export interface ProductCategoryUseCases {

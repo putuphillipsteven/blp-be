@@ -40,6 +40,11 @@ export class ProductCategoryInteractor implements ProductCategoryUseCases {
 		}
 	}
 	async delete(args: DeleteProductCategoryProps): Promise<Product_Category | undefined> {
-		throw new Error('Method not implemented.');
+		try {
+			const res = await this.repository.delete(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 }

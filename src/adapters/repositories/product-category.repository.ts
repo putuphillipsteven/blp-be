@@ -105,6 +105,31 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 	}
 
 	async delete(args: DeleteProductCategoryProps): Promise<Product_Category | undefined> {
-		throw new Error('Method not implemented.');
+		try {
+			const { id } = args;
+			const checkChildren = async () => {
+				const children = await this.prisma.product_Category.findMany({
+					where: {
+						parent_id: id,
+					},
+				});
+				if (children.length > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			};
+			if (await checkChildren()) {
+				throw new Error('This Product Category has Children, cant delete');
+			}
+			const res = await this.prisma.product_Category.delete({
+				where: {
+					id,
+				},
+			});
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 }

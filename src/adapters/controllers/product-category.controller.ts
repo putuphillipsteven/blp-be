@@ -8,6 +8,16 @@ export class ProductCategoryController implements IProductCategoryController {
 	constructor(interactor: ProductCategoryInteractor) {
 		this.interactor = interactor;
 	}
+	async delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+			const args = { id: Number(id) };
+			const data = await this.interactor.delete(args);
+			return sendResponse(res, 200, 'Delete Product Category Success', data);
+		} catch (error) {
+			next(error);
+		}
+	}
 	async update(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;

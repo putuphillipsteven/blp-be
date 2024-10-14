@@ -12,5 +12,6 @@ const router = express.Router();
 router.get('/', controller.get.bind(controller));
 router.post('/create', controller.create.bind(controller));
 router.patch('/:id', controller.update.bind(controller));
+router.delete('/:id', controller.delete.bind(controller));
 
 export = router;
