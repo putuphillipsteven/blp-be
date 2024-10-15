@@ -15,8 +15,13 @@ export class UserInteractor implements UserUseCases {
 			throw error;
 		}
 	}
-	create(args: CreateUserProps): Promise<User | undefined> {
-		throw new Error('Method not implemented.');
+	async create(args: CreateUserProps): Promise<User | undefined> {
+		try {
+			const res = await this.repository.create(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 	update(args: any): Promise<User | undefined> {
 		throw new Error('Method not implemented.');

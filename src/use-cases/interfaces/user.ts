@@ -24,6 +24,8 @@ export interface GetUserProps {
 	name: string;
 	phone_number: string;
 	role_id: number;
+	page: number;
+	page_size: number;
 }
 
 export interface CreateUserProps extends User {}
