@@ -4,6 +4,7 @@ import { validator } from '../../middleware/validator';
 import { UserRepository } from '../../adapters/repositories/user.repository';
 import { UserInteractor } from '../../use-cases/interactor/user.interactor';
 import { UserController } from '../../adapters/controllers/user.controller';
+import { uploadAvatarFile } from '../../middleware/multer';
 
 const repository = new UserRepository();
 const interactor = new UserInteractor(repository);
@@ -22,7 +23,9 @@ const createUserValidations = [
 ];
 const router = express.Router();
 
-router.post('/register', validator(createUserValidations), controller.create.bind(controller));
 router.get('/', controller.get.bind(controller));
+router.post('/register', validator(createUserValidations), controller.create.bind(controller));
+router.patch('/:id', uploadAvatarFile, controller.update.bind(controller));
+router.delete('/:id', controller.delete.bind(controller));
 
 export = router;

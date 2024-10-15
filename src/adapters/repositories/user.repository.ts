@@ -4,6 +4,7 @@ import {
 	CreateUserProps,
 	GetUserProps,
 	ReturnUserProps,
+	UpdateUserProps,
 	UserUseCases,
 } from '../../use-cases/interfaces/user';
 import { exclude } from '../../utils/excludePassword';
@@ -123,10 +124,45 @@ export class UserRepository implements UserUseCases {
 			throw error;
 		}
 	}
-	update(args: any): Promise<User | undefined> {
-		throw new Error('Method not implemented.');
+	async update(args: UpdateUserProps): Promise<any | undefined> {
+		try {
+			const argsToUpdate: any = {};
+			const {
+				id,
+				avatar_url,
+				first_name,
+				last_name,
+				phone_number,
+				role_id,
+				second_phone_number,
+				gender_id,
+			}: UpdateUserProps = args;
+
+			if (avatar_url) argsToUpdate.avatar_url = avatar_url;
+			if (first_name) argsToUpdate.first_name = first_name;
+			if (last_name) argsToUpdate.last_name = last_name;
+			if (phone_number) argsToUpdate.phone_number = phone_number;
+			if (role_id) argsToUpdate.role_id = Number(role_id);
+			if (second_phone_number) argsToUpdate.second_phone_number = second_phone_number;
+			if (gender_id) argsToUpdate.gender_id = Number(gender_id);
+
+			const res = await this.prisma.user.update({ where: { id }, data: argsToUpdate });
+			return exclude(res, ['password']);
+		} catch (error) {
+			throw error;
+		}
 	}
-	delete(args: any): Promise<User | undefined> {
-		throw new Error('Method not implemented.');
+	async delete(args: any): Promise<any | undefined> {
+		try {
+			const { id } = args;
+			const res = await this.prisma.user.delete({
+				where: {
+					id,
+				},
+			});
+			return exclude(res, ['password']);
+		} catch (error) {
+			throw error;
+		}
 	}
 }

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { GetUserProps, IUserController } from '../../use-cases/interfaces/user';
+import { GetUserProps, IUserController, UpdateUserProps } from '../../use-cases/interfaces/user';
 import { UserInteractor } from '../../use-cases/interactor/user.interactor';
 import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
@@ -36,10 +36,24 @@ export class UserController implements IUserController {
 			next(error);
 		}
 	}
-	update(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
-		throw new Error('Method not implemented.');
+	async update(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+			const avatar_url = req?.file?.filename;
+			const data = await this.interactor.update({ ...req.body, id: Number(id), avatar_url });
+			return sendResponse(res, 200, 'Update User Success', data);
+		} catch (error) {
+			next(error);
+		}
 	}
-	delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
-		throw new Error('Method not implemented.');
+	async delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+			const args = { id: Number(id) };
+			const data = await this.interactor.delete(args);
+			return sendResponse(res, 200, 'Delete User Success', data);
+		} catch (error) {
+			next(error);
+		}
 	}
 }

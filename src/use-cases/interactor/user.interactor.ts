@@ -1,6 +1,12 @@
 import { UserRepository } from '../../adapters/repositories/user.repository';
 import { User } from '../../entities/user';
-import { CreateUserProps, GetUserProps, ReturnUserProps, UserUseCases } from '../interfaces/user';
+import {
+	CreateUserProps,
+	GetUserProps,
+	ReturnUserProps,
+	UpdateUserProps,
+	UserUseCases,
+} from '../interfaces/user';
 
 export class UserInteractor implements UserUseCases {
 	private repository: UserRepository;
@@ -23,10 +29,20 @@ export class UserInteractor implements UserUseCases {
 			throw error;
 		}
 	}
-	update(args: any): Promise<User | undefined> {
-		throw new Error('Method not implemented.');
+	async update(args: UpdateUserProps): Promise<User | undefined> {
+		try {
+			const res = await this.repository.update(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
-	delete(args: any): Promise<User | undefined> {
-		throw new Error('Method not implemented.');
+	async delete(args: any): Promise<User | undefined> {
+		try {
+			const res = await this.repository.delete(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 }

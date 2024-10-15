@@ -29,3 +29,5 @@ export interface GetUserProps {
 }
 
 export interface CreateUserProps extends User {}
+
+export type UpdateUserProps = Omit<User, 'email' | 'password'>;

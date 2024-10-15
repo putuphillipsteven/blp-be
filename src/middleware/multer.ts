@@ -23,13 +23,13 @@ const productImageStorage = multer.diskStorage({
 	},
 });
 
-const profileStorage = multer.diskStorage({
+const avatarStorage = multer.diskStorage({
 	destination: (
 		req: Request,
 		file: Express.Multer.File,
 		cb: (error: Error | null, destination: string) => void,
 	) => {
-		cb(null, path.join(__dirname, '../public/images/profile'));
+		cb(null, path.join(__dirname, '../public/images/avatar'));
 	},
 	filename: (
 		req: Request,
@@ -66,8 +66,8 @@ export const uploadProductImageFile = multer({
 	limits,
 }).single('image_url');
 
-export const uploadProfileFile = multer({
-	storage: profileStorage,
+export const uploadAvatarFile = multer({
+	storage: avatarStorage,
 	fileFilter,
 	limits: limitsProfile,
-}).single('image');
+}).single('avatar_url');
