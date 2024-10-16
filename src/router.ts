@@ -9,7 +9,7 @@ const productCategoryRoute = require('./drivers/routes/product-category.route');
 router.use('/product-categories', productCategoryRoute);
 
 const transactionRoute = require('./drivers/routes/transaction.route');
-router.use('/transaction', transactionRoute);
+router.use('/transactions', transactionRoute);
 
 const authRoute = require('./drivers/routes/auth.route');
 router.use('/auth', authRoute);

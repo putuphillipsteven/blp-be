@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { IAuthController } from '../../use-cases/interfaces/i.auth';
+import { IAuthController } from '../../use-cases/interfaces/auth';
 import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
 import { sendResponse } from '../../utils/utilts';
 

@@ -4,7 +4,7 @@ import {
 	LoginProps,
 	LoginReturnProps,
 	LoginReturnUserProps,
-} from '../interfaces/i.auth';
+} from '../interfaces/auth';
 
 export class AuthInteractor implements AuthUseCases {
 	private repository: AuthRepository;

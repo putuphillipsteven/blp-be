@@ -109,6 +109,22 @@ async function main() {
 		},
 	});
 
+	const johnDoe = await prisma.user.upsert({
+		where: {
+			id: 4,
+		},
+		update: {},
+		create: {
+			id: 4,
+			first_name: 'John',
+			last_name: 'Doe',
+			phone_number: '081234567893',
+			email: 'johndoe@gmail.com',
+			password: '$2b$10$E6L835/pj8LlCVPwI6deye0u4D9iWvZ8bVJayS6evgH7YB8R7bhTO',
+			role_id: 3,
+			gender_id: 1,
+		},
+	});
 	const graduation = await prisma.product_Category.upsert({
 		where: {
 			id: 1,
@@ -193,6 +209,17 @@ async function main() {
 			product_name: 'Platinum Laminating',
 			product_category_id: 1,
 			product_price: 1300000,
+		},
+	});
+
+	const cash = await prisma.payment_Method.upsert({
+		where: {
+			id: 1,
+		},
+		update: {},
+		create: {
+			id: 1,
+			method_name: 'Cash',
 		},
 	});
 }

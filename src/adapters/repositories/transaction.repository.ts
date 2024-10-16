@@ -1,28 +1,26 @@
 import { PrismaClient } from '@prisma/client';
 
 import { Transaction } from '../../entities/transaction';
-import { ITransactionRepository } from '../../use-cases/interfaces/transaction/i.transaction.repository';
 import {
 	CreateTransactionWithDetailsProps,
 	GetTransactionFilters,
 	GetTransactionReturnProps,
-} from '../../use-cases/interfaces/transaction/i.transaction';
+	TransactionUseCases,
+} from '../../use-cases/interfaces/transaction';
 
-export class TransactionRepository implements ITransactionRepository {
+export class TransactionRepository implements TransactionUseCases {
 	private prisma: PrismaClient;
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
-	updateTransaction(): Promise<Transaction | undefined> {
+	update(): Promise<Transaction | undefined> {
 		throw new Error('Method not implemented.');
 	}
-	deleteTransaction(): Promise<Transaction | undefined> {
+	delete(): Promise<Transaction | undefined> {
 		throw new Error('Method not implemented.');
 	}
 
-	async getTransactions(
-		args: GetTransactionFilters,
-	): Promise<GetTransactionReturnProps | undefined> {
+	async get(args: GetTransactionFilters): Promise<GetTransactionReturnProps | undefined> {
 		try {
 			// Define skip and take for pagination
 			const skip = (Number(args.page) - 1) * Number(args.pageSize);
@@ -56,12 +54,21 @@ export class TransactionRepository implements ITransactionRepository {
 				include: {
 					user: {
 						select: {
+							first_name: true,
+							last_name: true,
 							password: false,
-							full_name: true,
 							email: true,
-							branch: {
-								select: { branch_name: true },
+							gender: {
+								select: { gender_name: true },
 							},
+						},
+					},
+					cashier: {
+						select: {
+							first_name: true,
+							last_name: true,
+							password: false,
+							email: true,
 							gender: {
 								select: { gender_name: true },
 							},
@@ -111,15 +118,28 @@ export class TransactionRepository implements ITransactionRepository {
 			throw error;
 		}
 	}
-	async createTransaction(
-		args: CreateTransactionWithDetailsProps,
-	): Promise<Transaction | undefined> {
+	async create(args: CreateTransactionWithDetailsProps): Promise<Transaction | undefined> {
 		try {
 			// Destructuring objects, separate the details, with the transaction data
 			const { details, ...transactionData } = args;
+			const USER_ID = transactionData.user_id;
+			const customer = await this.prisma.user.findFirst({
+				where: {
+					id: USER_ID,
+				},
+				select: {
+					first_name: true,
+					last_name: true,
+				},
+			});
+			let customerFullName = 'Customer';
+			if (customer) {
+				customerFullName = customer.first_name + ' ' + customer.last_name;
+			}
+
 			const createTransaction = await this.prisma.transaction.create({
 				data: {
-					customer_name: transactionData.customer_name,
+					customer_name: customerFullName,
 					payment_amount: transactionData.payment_amount,
 					payment_change: transactionData.payment_amount - transactionData.total_price,
 					payment_method_id: transactionData.payment_method_id,
