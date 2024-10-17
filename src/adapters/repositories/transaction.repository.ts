@@ -122,7 +122,9 @@ export class TransactionRepository implements TransactionUseCases {
 		try {
 			// Destructuring objects, separate the details, with the transaction data
 			const { details, ...transactionData } = args;
+
 			const USER_ID = transactionData.user_id;
+
 			const customer = await this.prisma.user.findFirst({
 				where: {
 					id: USER_ID,
@@ -132,34 +134,69 @@ export class TransactionRepository implements TransactionUseCases {
 					last_name: true,
 				},
 			});
+
 			let customerFullName = 'Customer';
+
 			if (customer) {
 				customerFullName = customer.first_name + ' ' + customer.last_name;
+			}
+
+			let totalPrice = 0;
+			let totalQty = 0;
+			let detailsData: any = [];
+
+			for (let product of details) {
+				const PRODUCT_ID = product.product_id;
+				const QTY = product.qty;
+				const CHECK_PRODUCT = await this.prisma.product.findFirst({
+					where: {
+						id: PRODUCT_ID,
+					},
+				});
+				if (CHECK_PRODUCT) {
+					totalPrice += CHECK_PRODUCT.product_price * QTY;
+					totalQty += QTY;
+					detailsData.push({
+						product_id: product.product_id,
+						qty: product.qty,
+						total_price: CHECK_PRODUCT.product_price * QTY,
+					});
+				} else {
+					throw new Error('Product Not Found');
+				}
+			}
+
+			if (transactionData.payment_amount < totalPrice) {
+				throw new Error('Under Payment');
 			}
 
 			const createTransaction = await this.prisma.transaction.create({
 				data: {
 					customer_name: customerFullName,
 					payment_amount: transactionData.payment_amount,
-					payment_change: transactionData.payment_amount - transactionData.total_price,
+					payment_change: transactionData.payment_amount - totalPrice,
 					payment_method_id: transactionData.payment_method_id,
-					total_price: transactionData.total_price,
-					total_price_ppn: transactionData.total_price + transactionData.total_price * 0.1,
-					total_qty: transactionData.total_qty,
+					total_price: totalPrice,
+					total_price_ppn: totalPrice + totalPrice * 0.1,
+					total_qty: totalQty,
 					user_id: transactionData.user_id,
 				},
 			});
+
 			const transaction_id = createTransaction?.id;
+
 			// Mapp the details data, but add transaction_id properties to the object
-			const detailsData = details.map((detail) => {
+			const newDetailsData = detailsData.map((detail: any) => {
 				return {
 					...detail,
 					transaction_id,
 				};
 			});
+
 			await this.prisma.transaction_Detail.createMany({
-				data: detailsData,
+				data: newDetailsData,
 			});
+
 			return createTransaction;
 		} catch (error) {
 			throw error;
