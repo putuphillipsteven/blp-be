@@ -1,10 +1,10 @@
 import express from 'express';
-import { ProductController } from '../../adapters/controllers/product.controller';
-import { ProductInteractor } from '../../use-cases/interactor/product.interactor';
-import { ProductRepository } from '../../adapters/repositories/product.repository';
+import { ProductController } from '../../adapters/controllers/product';
+import { ProductInteractor } from '../../use-cases/interactor/product';
+import { ProductRepository } from '../../adapters/repositories/product';
 import { body } from 'express-validator';
 import { validator } from '../../middleware/validator';
-import { checkRoleEmployeeOrManager, verifyToken } from '../../middleware/auth.middleware';
+import { checkRoleEmployeeOrManager, verifyToken } from '../../middleware/auth';
 
 const repository = new ProductRepository();
 const interactor = new ProductInteractor(repository);
@@ -46,4 +46,4 @@ router.delete(
 	controller.delete.bind(controller),
 );
 
-export = router;
+export default router;

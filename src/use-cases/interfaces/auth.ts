@@ -15,10 +15,20 @@ export interface LoginReturnProps {
 	token: string;
 }
 
+export interface KeepLoginProps {
+	id: number;
+}
+
+export interface CustomRequest extends Request {
+	user: any;
+}
+
 export interface AuthUseCases {
 	login(args: LoginProps): Promise<LoginReturnProps | undefined>;
+	keepLogin(args: KeepLoginProps): Promise<any | undefined>;
 }
 
 export interface IAuthController {
 	login(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	keepLogin(req: CustomRequest, res: Response, next: NextFunction): Promise<any | undefined>;
 }

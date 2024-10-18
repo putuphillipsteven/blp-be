@@ -7,7 +7,7 @@ import {
 	IProductController,
 	UpdateProductProps,
 } from '../../use-cases/interfaces/product';
-import { ProductInteractor } from '../../use-cases/interactor/product.interactor';
+import { ProductInteractor } from '../../use-cases/interactor/product';
 
 export class ProductController implements IProductController {
 	private interactor: ProductInteractor;

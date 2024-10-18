@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { sendResponse } from '../../utils/utilts';
 import { IProductImageController } from '../../use-cases/interfaces/product-image';
-import { ProductImageInteractor } from '../../use-cases/interactor/product-image.interactor';
+import { ProductImageInteractor } from '../../use-cases/interactor/product-image';
 
 export class ProductImageController implements IProductImageController {
 	private interactor: ProductImageInteractor;

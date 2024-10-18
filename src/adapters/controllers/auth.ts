@@ -1,12 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
-import { IAuthController } from '../../use-cases/interfaces/auth';
-import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
+import { CustomRequest, IAuthController } from '../../use-cases/interfaces/auth';
+import { AuthInteractor } from '../../use-cases/interactor/auth';
 import { sendResponse } from '../../utils/utilts';
 
 export class AuthController implements IAuthController {
 	private interactor: AuthInteractor;
 	constructor(interactor: AuthInteractor) {
 		this.interactor = interactor;
+	}
+	async keepLogin(req: CustomRequest, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.user;
+			const args = { id };
+			const result = await this.interactor.keepLogin(args);
+			return sendResponse(res, 200, 'Keep Login Success', result);
+		} catch (error) {
+			next(error);
+		}
 	}
 	async login(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {

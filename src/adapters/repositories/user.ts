@@ -7,7 +7,7 @@ import {
 	UpdateUserProps,
 	UserUseCases,
 } from '../../use-cases/interfaces/user';
-import { exclude } from '../../utils/excludePassword';
+import { exclude } from '../../utils/exclude-password';
 
 export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;

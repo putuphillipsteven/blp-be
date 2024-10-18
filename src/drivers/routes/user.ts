@@ -1,9 +1,9 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { validator } from '../../middleware/validator';
-import { UserRepository } from '../../adapters/repositories/user.repository';
-import { UserInteractor } from '../../use-cases/interactor/user.interactor';
-import { UserController } from '../../adapters/controllers/user.controller';
+import { UserRepository } from '../../adapters/repositories/user';
+import { UserInteractor } from '../../use-cases/interactor/user';
+import { UserController } from '../../adapters/controllers/user';
 import { uploadAvatarFile } from '../../middleware/multer';
 
 const repository = new UserRepository();
@@ -19,7 +19,6 @@ const createUserValidations = [
 		.withMessage(
 			'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
 		),
-	,
 ];
 const router = express.Router();
 
@@ -28,4 +27,4 @@ router.post('/register', validator(createUserValidations), controller.create.bin
 router.patch('/:id', uploadAvatarFile, controller.update.bind(controller));
 router.delete('/:id', controller.delete.bind(controller));
 
-export = router;
+export default router;

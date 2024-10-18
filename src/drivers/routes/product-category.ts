@@ -1,7 +1,7 @@
 import express from 'express';
-import { ProductCategoryRepository } from '../../adapters/repositories/product-category.repository';
-import { ProductCategoryInteractor } from '../../use-cases/interactor/product-category.interactor';
-import { ProductCategoryController } from '../../adapters/controllers/product-category.controller';
+import { ProductCategoryRepository } from '../../adapters/repositories/product-category';
+import { ProductCategoryInteractor } from '../../use-cases/interactor/product-category';
+import { ProductCategoryController } from '../../adapters/controllers/product-category';
 
 const repository = new ProductCategoryRepository();
 const interactor = new ProductCategoryInteractor(repository);
@@ -15,4 +15,4 @@ router.post('/create', controller.create.bind(controller));
 router.patch('/:id', controller.update.bind(controller));
 router.delete('/:id', controller.delete.bind(controller));
 
-export = router;
+export default router;

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { sendResponse } from '../../utils/utilts';
 import { IProductCategoryController } from '../../use-cases/interfaces/product-category';
-import { ProductCategoryInteractor } from '../../use-cases/interactor/product-category.interactor';
+import { ProductCategoryInteractor } from '../../use-cases/interactor/product-category';
 
 export class ProductCategoryController implements IProductCategoryController {
 	private interactor: ProductCategoryInteractor;

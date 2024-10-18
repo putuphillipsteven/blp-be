@@ -7,7 +7,7 @@ import {
 	ProductCategoryUseCases,
 	GetProductDetailsProps,
 } from '../interfaces/product-category';
-import { ProductCategoryRepository } from '../../adapters/repositories/product-category.repository';
+import { ProductCategoryRepository } from '../../adapters/repositories/product-category';
 import { ProductCategory } from '../../entities/product-category';
 
 export class ProductCategoryInteractor implements ProductCategoryUseCases {

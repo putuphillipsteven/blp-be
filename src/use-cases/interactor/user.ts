@@ -1,4 +1,4 @@
-import { UserRepository } from '../../adapters/repositories/user.repository';
+import { UserRepository } from '../../adapters/repositories/user';
 import { User } from '../../entities/user';
 import {
 	CreateUserProps,

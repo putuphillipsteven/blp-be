@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { GetUserProps, IUserController, UpdateUserProps } from '../../use-cases/interfaces/user';
-import { UserInteractor } from '../../use-cases/interactor/user.interactor';
+import { UserInteractor } from '../../use-cases/interactor/user';
 import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
 import bcrypt from 'bcrypt';

@@ -1,13 +1,30 @@
 import { PrismaClient } from '@prisma/client';
-import { AuthUseCases, LoginProps } from '../../use-cases/interfaces/auth';
+import { AuthUseCases, KeepLoginProps, LoginProps } from '../../use-cases/interfaces/auth';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { exclude } from '../../utils/excludePassword';
+import { exclude } from '../../utils/exclude-password';
 
 export class AuthRepository implements AuthUseCases {
 	private prisma: PrismaClient;
 	constructor() {
 		this.prisma = new PrismaClient();
+	}
+	async keepLogin(args: KeepLoginProps): Promise<any | undefined> {
+		try {
+			const { id } = args;
+			const res = await this.prisma.user.findFirst({
+				where: {
+					id,
+				},
+			});
+			if (res) {
+				return exclude(res, ['password']);
+			} else {
+				throw new Error('User Not Found');
+			}
+		} catch (error) {
+			throw error;
+		}
 	}
 	async login(args: LoginProps): Promise<any | undefined> {
 		try {

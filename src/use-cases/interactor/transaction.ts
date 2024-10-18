@@ -1,4 +1,4 @@
-import { TransactionRepository } from '../../adapters/repositories/transaction.repository';
+import { TransactionRepository } from '../../adapters/repositories/transaction';
 import { Transaction } from '../../entities/transaction';
 import {
 	CreateTransactionWithDetailsProps,

@@ -1,4 +1,4 @@
-import { ProductRepository } from '../../adapters/repositories/product.repository';
+import { ProductRepository } from '../../adapters/repositories/product';
 import { Product } from '../../entities/product';
 import {
 	CreateProductProps,

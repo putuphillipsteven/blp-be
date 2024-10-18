@@ -1,7 +1,7 @@
 import express from 'express';
-import { TransactionRepository } from '../../adapters/repositories/transaction.repository';
-import { TransactionInteractor } from '../../use-cases/interactor/transaction.interactor';
-import { TransactionController } from '../../adapters/controllers/transaction.controller';
+import { TransactionRepository } from '../../adapters/repositories/transaction';
+import { TransactionInteractor } from '../../use-cases/interactor/transaction';
+import { TransactionController } from '../../adapters/controllers/transaction';
 import { body } from 'express-validator';
 import { validator } from '../../middleware/validator';
 
@@ -21,4 +21,4 @@ const createTransactionValidations = [
 router.get('/', controller.get.bind(controller));
 router.post('/create', validator(createTransactionValidations), controller.create.bind(controller));
 
-export = router;
+export default router;

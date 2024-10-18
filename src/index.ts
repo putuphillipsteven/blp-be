@@ -1,10 +1,10 @@
+import { errorHandler } from './middleware/error-handler';
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
-import bodyParser = require('body-parser');
-import { errorHandler } from './middleware/error-handler';
 import router from './router';
-const cors = require('cors');
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
 dotenv.config({
 	path: path.resolve(__dirname, '../.env'),

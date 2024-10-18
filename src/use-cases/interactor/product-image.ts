@@ -4,7 +4,7 @@ import {
 	ProductImageUseCases,
 } from '../interfaces/product-image';
 import { ProductImage } from '../../entities/product-image';
-import { ProductImageRepository } from '../../adapters/repositories/product-image.repository';
+import { ProductImageRepository } from '../../adapters/repositories/product-image';
 
 export class ProductImageInteractor implements ProductImageUseCases {
 	private repository: ProductImageRepository;

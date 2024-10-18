@@ -1,7 +1,7 @@
 import express from 'express';
-import { AuthRepository } from '../../adapters/repositories/auth.repository';
-import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
-import { AuthController } from '../../adapters/controllers/auth.controller';
+import { AuthRepository } from '../../adapters/repositories/auth';
+import { AuthInteractor } from '../../use-cases/interactor/auth';
+import { AuthController } from '../../adapters/controllers/auth';
 import { body } from 'express-validator';
 import { validator } from '../../middleware/validator';
 
@@ -17,5 +17,6 @@ const controller = new AuthController(interactor);
 const router = express.Router();
 
 router.post('/login', validator(loginValidator), controller.login.bind(controller));
+// router.get('/keep-login', verifyToken);
 
-export = router;
+export default router;

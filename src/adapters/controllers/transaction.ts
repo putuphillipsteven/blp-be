@@ -6,7 +6,7 @@ import {
 	GetTransactionReturnProps,
 	ITransactionController,
 } from '../../use-cases/interfaces/transaction';
-import { TransactionInteractor } from '../../use-cases/interactor/transaction.interactor';
+import { TransactionInteractor } from '../../use-cases/interactor/transaction';
 import { Transaction } from '../../entities/transaction';
 export class TransactionController implements ITransactionController {
 	private interactor: TransactionInteractor;
