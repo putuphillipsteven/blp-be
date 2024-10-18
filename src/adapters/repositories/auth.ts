@@ -29,25 +29,33 @@ export class AuthRepository implements AuthUseCases {
 	async login(args: LoginProps): Promise<any | undefined> {
 		try {
 			const { email, password } = args;
+
 			const isUserExist = await this.prisma.user.findUnique({
 				where: { email },
 			});
-			if (!isUserExist) throw new Error('Sorry, email doesnt exist');
-			const isValid = await bcrypt.compare(password, isUserExist.password || '');
 
-			if (!isValid) throw new Error('Wrong password');
-			let payload = {
+			if (!isUserExist) throw new Error('Sorry, email doesnt exist');
+
+			const isPasswordValid = await bcrypt.compare(password, isUserExist.password || '');
+
+			if (!isPasswordValid) throw new Error('Wrong password');
+
+			const payload = {
 				id: isUserExist.id,
 				email: isUserExist.email,
 				roleId: isUserExist.role_id,
 			};
+
 			const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
 			if (!jwtSecretKey) {
 				throw new Error('JWT_SECRET_KEY is not defined in environment variables');
 			}
+
 			const token = jwt.sign(payload, jwtSecretKey, {
 				expiresIn: '1h',
 			});
+
 			return { user: exclude(isUserExist, ['password']), token };
 		} catch (error) {
 			throw error;

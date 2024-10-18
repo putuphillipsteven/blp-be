@@ -15,10 +15,25 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
+	async isChildrenExist(id: number) {
+		const children = await this.prisma.product_Category.findMany({
+			where: {
+				parent_id: id,
+			},
+		});
+
+		if (children.length > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	async getDetails(args: GetProductDetailsProps): Promise<any | null> {
 		try {
 			const res = await this.get();
+
 			const { id } = args;
+
 			return res?.data.find((result) => {
 				return result.id === id;
 			});
@@ -29,6 +44,7 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 	async create(args: CreateProductCategoryProps): Promise<ProductCategory | undefined> {
 		try {
 			const res = await this.prisma.product_Category.create({ data: args });
+
 			return res;
 		} catch (error) {
 			throw error;
@@ -81,24 +97,12 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 		try {
 			const { id, name, parent_id } = args;
 
-			const checkChildren = async () => {
-				const res = await this.prisma.product_Category.findMany({
-					where: {
-						parent_id: id,
-					},
-				});
-				if (res) {
-					return true;
-				} else {
-					return false;
-				}
-			};
-
-			console.log(await checkChildren());
 			const toBeUpdated: any = {};
+
 			if (name) toBeUpdated.name = name;
+
 			if (parent_id && parent_id !== null) {
-				if (await checkChildren()) {
+				if (await this.isChildrenExist(parent_id)) {
 					throw new Error('This product category have children, cant change the parent_id');
 				}
 				toBeUpdated.parent_id = parent_id;
@@ -119,26 +123,19 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 	async delete(args: DeleteProductCategoryProps): Promise<Product_Category | undefined> {
 		try {
 			const { id } = args;
-			const checkChildren = async () => {
-				const children = await this.prisma.product_Category.findMany({
-					where: {
-						parent_id: id,
-					},
-				});
-				if (children.length > 0) {
-					return true;
-				} else {
-					return false;
-				}
-			};
-			if (await checkChildren()) {
+
+			console.log(await this.isChildrenExist(id));
+
+			if (await this.isChildrenExist(id)) {
 				throw new Error('This Product Category has Children, cant delete');
 			}
+
 			const res = await this.prisma.product_Category.delete({
 				where: {
 					id,
 				},
 			});
+
 			return res;
 		} catch (error) {
 			throw error;
