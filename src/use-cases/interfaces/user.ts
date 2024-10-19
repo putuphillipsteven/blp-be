@@ -11,6 +11,7 @@ export interface UserUseCases {
 	create(args: CreateUserProps): Promise<ReturnUserProps | undefined>;
 	update(args: any): Promise<ReturnUserProps | undefined>;
 	delete(args: any): Promise<ReturnUserProps | undefined>;
+	createWithGoogle(args: CreateUserProps): Promise<any | undefined>;
 }
 
 export interface IUserController {

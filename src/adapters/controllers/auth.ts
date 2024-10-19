@@ -9,6 +9,9 @@ export class AuthController implements IAuthController {
 	constructor(interactor: AuthInteractor) {
 		this.interactor = interactor;
 	}
+	googleLogin(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		throw new Error('Method not implemented.');
+	}
 	async keepLogin(
 		req: IVerifyTokenReq,
 		res: Response,

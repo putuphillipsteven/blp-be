@@ -13,6 +13,14 @@ export class UserInteractor implements UserUseCases {
 	constructor(repository: UserRepository) {
 		this.repository = repository;
 	}
+	async createWithGoogle(args: CreateUserProps): Promise<any | undefined> {
+		try {
+			const res = await this.repository.createWithGoogle(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
+	}
 	async get(args: GetUserProps): Promise<ReturnUserProps[] | undefined> {
 		try {
 			const res = await this.repository.get(args);

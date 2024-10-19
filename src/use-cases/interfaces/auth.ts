@@ -27,9 +27,11 @@ export interface CustomRequest extends Request {
 export interface AuthUseCases {
 	login(args: LoginProps): Promise<LoginReturnProps | undefined>;
 	keepLogin(args: KeepLoginProps): Promise<any | undefined>;
+	googleLogin(): Promise<any | undefined>;
 }
 
 export interface IAuthController {
 	login(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 	keepLogin(req: IVerifyTokenReq, res: Response, next: NextFunction): Promise<any | undefined>;
+	googleLogin(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 }

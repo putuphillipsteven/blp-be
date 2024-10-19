@@ -9,6 +9,13 @@ export class AuthRepository implements AuthUseCases {
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
+
+	async googleLogin(): Promise<any | undefined> {
+		try {
+		} catch (error) {
+			throw error;
+		}
+	}
 	async keepLogin(args: KeepLoginProps): Promise<any | undefined> {
 		try {
 			const { id } = args;
@@ -19,8 +26,6 @@ export class AuthRepository implements AuthUseCases {
 			});
 			if (res) {
 				return exclude(res, ['password']);
-			} else {
-				throw new Error('User Not Found');
 			}
 		} catch (error) {
 			throw error;

@@ -15,6 +15,17 @@ export class UserRepository implements UserUseCases {
 		this.prisma = new PrismaClient();
 	}
 
+	async createWithGoogle(args: CreateUserProps): Promise<any | undefined> {
+		try {
+			const res = await this.prisma.user.create({
+				data: args,
+			});
+			return res;
+		} catch (error) {
+			throw error;
+		}
+	}
+
 	async get(args: GetUserProps): Promise<ReturnUserProps[] | undefined> {
 		try {
 			let { name, phone_number, role_id, page, page_size }: GetUserProps = args;
