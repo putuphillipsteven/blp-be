@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../entities/user';
+import { IVerifyTokenReq } from '../../middleware/auth';
 
 export interface CreateUserProps extends User {}
 
@@ -30,5 +31,5 @@ export interface AuthUseCases {
 
 export interface IAuthController {
 	login(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	keepLogin(req: CustomRequest, res: Response, next: NextFunction): Promise<any | undefined>;
+	keepLogin(req: IVerifyTokenReq, res: Response, next: NextFunction): Promise<any | undefined>;
 }

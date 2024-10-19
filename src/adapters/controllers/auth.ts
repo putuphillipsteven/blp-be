@@ -2,13 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import { CustomRequest, IAuthController } from '../../use-cases/interfaces/auth';
 import { AuthInteractor } from '../../use-cases/interactor/auth';
 import { sendResponse } from '../../utils/utilts';
+import { IVerifyTokenReq } from '../../middleware/auth';
 
 export class AuthController implements IAuthController {
 	private interactor: AuthInteractor;
 	constructor(interactor: AuthInteractor) {
 		this.interactor = interactor;
 	}
-	async keepLogin(req: CustomRequest, res: Response, next: NextFunction): Promise<any | undefined> {
+	async keepLogin(
+		req: IVerifyTokenReq,
+		res: Response,
+		next: NextFunction,
+	): Promise<any | undefined> {
 		try {
 			const { id } = req.user;
 			const args = { id };

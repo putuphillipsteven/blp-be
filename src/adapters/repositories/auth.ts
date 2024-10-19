@@ -43,7 +43,7 @@ export class AuthRepository implements AuthUseCases {
 			const payload = {
 				id: isUserExist.id,
 				email: isUserExist.email,
-				roleId: isUserExist.role_id,
+				role_id: isUserExist.role_id,
 			};
 
 			const jwtSecretKey = process.env.JWT_SECRET_KEY;

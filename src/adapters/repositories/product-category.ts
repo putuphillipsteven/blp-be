@@ -124,8 +124,6 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 		try {
 			const { id } = args;
 
-			console.log(await this.isChildrenExist(id));
-
 			if (await this.isChildrenExist(id)) {
 				throw new Error('This Product Category has Children, cant delete');
 			}
