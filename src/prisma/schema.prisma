@@ -59,6 +59,10 @@ model Transaction {
   payment_change     Int?
   total_price_ppn    Int?
   transaction_detail Transaction_Detail[]
+  booking            Booking?             @relation(fields: [booking_id], references: [id])
+  booking_id         Int?
+  status             Status               @relation(fields: [status_id], references: [id])
+  status_id          Int
   created_at         DateTime             @default(now())
   updated_at         DateTime?
   deleted_at         DateTime?
@@ -122,19 +126,21 @@ model User_Address {
 }
 
 model Status {
-  id      Int       @id @default(autoincrement())
-  name    String
-  Booking Booking[]
+  id          Int           @id @default(autoincrement())
+  name        String
+  Booking     Booking[]
+  Transaction Transaction[]
 }
 
 model Booking {
-  id              Int       @id @default(autoincrement())
-  customer        User      @relation(fields: [customer_id], references: [id])
+  id              Int           @id @default(autoincrement())
+  customer        User          @relation(fields: [customer_id], references: [id])
   customer_id     Int
   booking_nominal Int
-  created_at      DateTime  @default(now())
+  created_at      DateTime      @default(now())
   updated_at      DateTime?
   deleted_at      DateTime?
-  status          Status    @relation(fields: [status_id], references: [id])
+  status          Status        @relation(fields: [status_id], references: [id])
   status_id       Int
+  Transaction     Transaction[]
 }
