@@ -29,6 +29,7 @@ model User {
   cashier_transactions  Transaction[]  @relation("cashier_user")
   customer_transactions Transaction[]  @relation("customer_user")
   User_Address          User_Address[]
+  Booking               Booking[]
 }
 
 model Role {
@@ -121,6 +122,19 @@ model User_Address {
 }
 
 model Status {
-  id   Int    @id @default(autoincrement())
-  name String
+  id      Int       @id @default(autoincrement())
+  name    String
+  Booking Booking[]
+}
+
+model Booking {
+  id              Int       @id @default(autoincrement())
+  customer        User      @relation(fields: [customer_id], references: [id])
+  customer_id     Int
+  booking_nominal Int
+  created_at      DateTime  @default(now())
+  updated_at      DateTime?
+  deleted_at      DateTime?
+  status          Status    @relation(fields: [status_id], references: [id])
+  status_id       Int
 }
