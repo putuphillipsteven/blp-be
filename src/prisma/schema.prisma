@@ -23,6 +23,7 @@ model User {
   role_id               Int?
   gender                Gender         @relation(fields: [gender_id], references: [id])
   gender_id             Int
+  is_verified           Boolean        @default(false)
   created_at            DateTime       @default(now())
   updated_at            DateTime?
   deleted_at            DateTime?
