@@ -118,6 +118,7 @@ export class TransactionRepository implements TransactionUseCases {
 			throw error;
 		}
 	}
+
 	async create(args: CreateTransactionWithDetailsProps): Promise<Transaction | undefined> {
 		try {
 			// Destructuring objects, separate the details, with the transaction data

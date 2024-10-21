@@ -7,7 +7,6 @@ export class Transaction implements PrismaTransaction {
 		public user_id: number,
 		public total_price: number,
 		public total_qty: number,
-		public payment_method_id: number,
 		public payment_amount: number,
 		public customer_name: string | null,
 		public payment_change: number | null,
@@ -17,6 +16,7 @@ export class Transaction implements PrismaTransaction {
 		public deleted_at: Date | null,
 		public booking_id: number | null,
 		public status_id: number,
-		public google_drive_link: string,
+		public google_drive_link: string | null,
+		public payment_method_id: number,
 	) {}
 }

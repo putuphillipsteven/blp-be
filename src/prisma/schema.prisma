@@ -53,7 +53,7 @@ model Transaction {
   user_id            Int                  @default(1)
   total_price        Int
   total_qty          Int
-  payment_method     Payment_Method       @relation(fields: [payment_method_id], references: [id])
+  payment_method     Payment_Method?      @relation(fields: [payment_method_id], references: [id])
   payment_method_id  Int
   payment_amount     Int
   customer_name      String?
