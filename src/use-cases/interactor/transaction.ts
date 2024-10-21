@@ -5,6 +5,7 @@ import {
 	GetTransactionFilters,
 	GetTransactionReturnProps,
 	TransactionUseCases,
+	UpdateTransactionProps,
 } from '../interfaces/transaction';
 
 export class TransactionInteractor implements TransactionUseCases {
@@ -30,8 +31,13 @@ export class TransactionInteractor implements TransactionUseCases {
 		}
 	}
 
-	update(): Promise<Transaction | undefined> {
-		throw new Error('Method not implemented.');
+	async update(args: UpdateTransactionProps): Promise<Transaction | undefined> {
+		try {
+			const res = await this.repository.update(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 	delete(): Promise<Transaction | undefined> {
 		throw new Error('Method not implemented.');

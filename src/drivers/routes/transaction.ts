@@ -4,6 +4,7 @@ import { TransactionInteractor } from '../../use-cases/interactor/transaction';
 import { TransactionController } from '../../adapters/controllers/transaction';
 import { body } from 'express-validator';
 import { validator } from '../../middleware/validator';
+import { verifyToken } from '../../middleware/auth';
 
 // Define all neccesary class
 const repository = new TransactionRepository();
@@ -19,6 +20,12 @@ const createTransactionValidations = [
 ];
 
 router.get('/', controller.get.bind(controller));
-router.post('/create', validator(createTransactionValidations), controller.create.bind(controller));
+router.patch('/', verifyToken, controller.update.bind(controller));
+router.post(
+	'/create',
+	verifyToken,
+	validator(createTransactionValidations),
+	controller.create.bind(controller),
+);
 
 export default router;

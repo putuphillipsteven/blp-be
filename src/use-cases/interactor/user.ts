@@ -2,6 +2,7 @@ import { UserRepository } from '../../adapters/repositories/user';
 import { User } from '../../entities/user';
 import {
 	CreateUserProps,
+	GetUserDetailsProps,
 	GetUserProps,
 	ReturnUserProps,
 	UpdateUserProps,
@@ -13,6 +14,16 @@ export class UserInteractor implements UserUseCases {
 	constructor(repository: UserRepository) {
 		this.repository = repository;
 	}
+
+	async getDetails(args: GetUserDetailsProps): Promise<User | null> {
+		try {
+			const res = await this.repository.getDetails(args);
+			return res;
+		} catch (error) {
+			throw error;
+		}
+	}
+
 	async createWithGoogle(args: CreateUserProps): Promise<any | undefined> {
 		try {
 			const res = await this.repository.createWithGoogle(args);

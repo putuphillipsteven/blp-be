@@ -6,6 +6,7 @@ import {
 	GetTransactionFilters,
 	GetTransactionReturnProps,
 	TransactionUseCases,
+	UpdateTransactionProps,
 } from '../../use-cases/interfaces/transaction';
 
 export class TransactionRepository implements TransactionUseCases {
@@ -13,8 +14,44 @@ export class TransactionRepository implements TransactionUseCases {
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
-	update(): Promise<Transaction | undefined> {
-		throw new Error('Method not implemented.');
+
+	async update(args: UpdateTransactionProps): Promise<Transaction | undefined> {
+		try {
+			const argsToUpdate: any = {};
+
+			const {
+				details,
+				booking_id,
+				cashier_id,
+				google_drive_link,
+				payment_method_id,
+				status_id,
+				user_id,
+				id,
+				customer_name,
+			}: UpdateTransactionProps = args;
+
+			if (booking_id) argsToUpdate.booking_id = booking_id;
+			if (cashier_id) argsToUpdate.cashier_id = cashier_id;
+			if (status_id) argsToUpdate.status_id = status_id;
+			if (user_id) argsToUpdate.user_id = user_id;
+			if (google_drive_link) argsToUpdate.google_drive_link = google_drive_link;
+			if (payment_method_id) argsToUpdate.payment_method_id = payment_method_id;
+			if (details) argsToUpdate.details = details;
+			if (customer_name) argsToUpdate.customer_name = customer_name;
+
+			const res = await this.prisma.transaction.update({
+				where: {
+					id,
+				},
+				data: {
+					...argsToUpdate,
+				},
+			});
+			return res;
+		} catch (error) {
+			throw error;
+		}
 	}
 	delete(): Promise<Transaction | undefined> {
 		throw new Error('Method not implemented.');
@@ -34,6 +71,7 @@ export class TransactionRepository implements TransactionUseCases {
 				('0' + (today.getMonth() + 1)).slice(-2) +
 				'-' +
 				('0' + today.getDate()).slice(-2);
+
 			/* 
 			Make default start date, if the date is null, so the default
 			start date is those, also the default endD date.
@@ -76,6 +114,7 @@ export class TransactionRepository implements TransactionUseCases {
 					},
 					payment_method: true,
 					transaction_detail: true,
+					status: true,
 				},
 			};
 
@@ -109,6 +148,9 @@ export class TransactionRepository implements TransactionUseCases {
 			const data = await this.prisma.transaction.findMany({
 				...newFilter,
 				...newInclude,
+				orderBy: {
+					created_at: 'desc',
+				},
 			});
 			return {
 				total,
@@ -124,11 +166,11 @@ export class TransactionRepository implements TransactionUseCases {
 			// Destructuring objects, separate the details, with the transaction data
 			const { details, ...transactionData } = args;
 
-			const USER_ID = transactionData.user_id;
+			const userId = transactionData.user_id;
 
 			const customer = await this.prisma.user.findFirst({
 				where: {
-					id: USER_ID,
+					id: userId,
 				},
 				select: {
 					first_name: true,
@@ -147,20 +189,20 @@ export class TransactionRepository implements TransactionUseCases {
 			let detailsData: any = [];
 
 			for (let product of details) {
-				const PRODUCT_ID = product.product_id;
-				const QTY = product.qty;
-				const CHECK_PRODUCT = await this.prisma.product.findFirst({
+				const productId = product.product_id;
+				const qty = product.qty;
+				const checkProduct = await this.prisma.product.findFirst({
 					where: {
-						id: PRODUCT_ID,
+						id: productId,
 					},
 				});
-				if (CHECK_PRODUCT) {
-					totalPrice += CHECK_PRODUCT.product_price * QTY;
-					totalQty += QTY;
+				if (checkProduct) {
+					totalPrice += checkProduct.product_price * qty;
+					totalQty += qty;
 					detailsData.push({
 						product_id: product.product_id,
 						qty: product.qty,
-						total_price: CHECK_PRODUCT.product_price * QTY,
+						total_price: checkProduct.product_price * qty,
 					});
 				} else {
 					throw new Error('Product Not Found');

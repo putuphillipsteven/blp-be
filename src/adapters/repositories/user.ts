@@ -2,9 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import { User } from '../../entities/user';
 import {
 	CreateUserProps,
+	GetUserDetailsProps,
 	GetUserProps,
 	ReturnUserProps,
 	UpdateUserProps,
+	UserDetailsReturnProps,
 	UserUseCases,
 } from '../../use-cases/interfaces/user';
 import { exclude } from '../../utils/exclude-password';
@@ -13,6 +15,24 @@ export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;
 	constructor() {
 		this.prisma = new PrismaClient();
+	}
+
+	async getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | any | null> {
+		try {
+			const { id } = args;
+			const res = await this.prisma.user.findFirst({
+				where: {
+					id,
+				},
+			});
+			if (res) {
+				return exclude(res, ['password']);
+			} else {
+				throw new Error('User Not Found');
+			}
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async createWithGoogle(args: CreateUserProps): Promise<any | undefined> {

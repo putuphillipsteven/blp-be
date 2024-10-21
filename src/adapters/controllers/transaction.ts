@@ -4,6 +4,7 @@ import { sendResponse } from '../../utils/utilts';
 import {
 	GetTransactionFilters,
 	ITransactionController,
+	UpdateTransactionProps,
 } from '../../use-cases/interfaces/transaction';
 import { TransactionInteractor } from '../../use-cases/interactor/transaction';
 import { Transaction } from '../../entities/transaction';
@@ -14,9 +15,26 @@ export class TransactionController implements ITransactionController {
 	constructor(interactor: TransactionInteractor) {
 		this.interactor = interactor;
 	}
-	update(req: Request, res: Response, next: NextFunction): Promise<Transaction | undefined> {
-		throw new Error('Method not implemented.');
+	async update(
+		req: RequestWithUserProps,
+		res: Response,
+		next: NextFunction,
+	): Promise<any | undefined> {
+		try {
+			const cashierId = req.user.id;
+			const { id } = req.params;
+			const updateData: UpdateTransactionProps = {
+				id: Number(id),
+				cashier_id: cashierId,
+				...req.body,
+			};
+			const result = await this.interactor.update(updateData);
+			return sendResponse(res, 200, 'Update Transaction Success', result);
+		} catch (error) {
+			next(error);
+		}
 	}
+
 	delete(req: Request, res: Response, next: NextFunction): Promise<Transaction | undefined> {
 		throw new Error('Method not implemented.');
 	}
@@ -27,10 +45,8 @@ export class TransactionController implements ITransactionController {
 		next: NextFunction,
 	): Promise<any | undefined> {
 		try {
-			const { user_id }: any = 1;
-			console.log('req.user: ', req.user);
-			console.log('user_id: ', user_id);
-			const result = await this.interactor.create({ ...req.body, user_id });
+			const cashierId = req.user.id;
+			const result = await this.interactor.create({ ...req.body, cashier_id: cashierId });
 			return sendResponse(res, 200, 'Create Transaction Success', result);
 		} catch (err) {
 			next(err);

@@ -222,6 +222,17 @@ async function main() {
 			method_name: 'Cash',
 		},
 	});
+
+	const completed = await prisma.status.upsert({
+		where: {
+			id: 1,
+		},
+		update: {},
+		create: {
+			id: 1,
+			name: 'Completed',
+		},
+	});
 }
 
 main()

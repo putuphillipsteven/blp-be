@@ -24,6 +24,7 @@ const createUserValidations = [
 const router = express.Router();
 
 router.get('/', controller.get.bind(controller));
+router.get('/details/:id', controller.getDetails.bind(controller));
 router.post('/register', validator(createUserValidations), controller.create.bind(controller));
 router.patch('/:id', uploadAvatarFile, controller.update.bind(controller));
 router.delete('/:id', controller.delete.bind(controller));

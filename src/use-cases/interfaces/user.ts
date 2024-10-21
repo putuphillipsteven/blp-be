@@ -18,8 +18,15 @@ export interface CreateUserProps extends User {}
 
 export type UpdateUserProps = Omit<User, 'email' | 'password'>;
 
+export type UserDetailsReturnProps = Omit<User, 'password'>;
+
+export interface GetUserDetailsProps {
+	id: number;
+}
+
 export interface UserUseCases {
 	get(args: GetUserProps): Promise<ReturnUserProps[] | undefined>;
+	getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null>;
 	create(args: CreateUserProps): Promise<ReturnUserProps | undefined>;
 	update(args: any): Promise<ReturnUserProps | undefined>;
 	delete(args: any): Promise<ReturnUserProps | undefined>;
@@ -28,6 +35,7 @@ export interface UserUseCases {
 
 export interface IUserController {
 	get(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 	create(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 	update(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 	delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;

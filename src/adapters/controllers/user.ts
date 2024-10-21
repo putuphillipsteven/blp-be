@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { GetUserProps, IUserController, UpdateUserProps } from '../../use-cases/interfaces/user';
+import {
+	GetUserDetailsProps,
+	GetUserProps,
+	IUserController,
+	UpdateUserProps,
+} from '../../use-cases/interfaces/user';
 import { UserInteractor } from '../../use-cases/interactor/user';
 import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
@@ -10,6 +15,20 @@ export class UserController implements IUserController {
 	constructor(interactor: UserInteractor) {
 		this.interactor = interactor;
 	}
+
+	async getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+		try {
+			const { id } = req.params;
+			const args: GetUserDetailsProps = {
+				id: Number(id),
+			};
+			const result = await this.interactor.getDetails(args);
+			return sendResponse(res, 200, 'Get User Details Success', result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
 	async get(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { name, phone_number, role_id, page, page_size } = req.query as ParsedQs & GetUserProps;
