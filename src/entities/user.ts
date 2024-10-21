@@ -15,5 +15,6 @@ export class User implements PrismaUser {
 		public created_at: Date,
 		public updated_at: Date | null,
 		public deleted_at: Date | null,
+		public is_verified: boolean,
 	) {}
 }
