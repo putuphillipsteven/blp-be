@@ -64,7 +64,7 @@ model Transaction {
   booking_id         Int?
   status             Status               @relation(fields: [status_id], references: [id])
   status_id          Int
-  google_drive_link  String
+  google_drive_link  String?
   created_at         DateTime             @default(now())
   updated_at         DateTime?
   deleted_at         DateTime?
