@@ -116,6 +116,7 @@ export class UserRepository implements UserUseCases {
 					id: true,
 					first_name: true,
 					last_name: true,
+					full_name: true,
 					phone_number: true,
 					second_phone_number: true,
 					role_id: true,
@@ -141,9 +142,11 @@ export class UserRepository implements UserUseCases {
 			throw error;
 		}
 	}
+
 	async create(args: CreateUserProps): Promise<any | undefined> {
 		try {
-			const { email, phone_number }: CreateUserProps = args;
+			const { email, phone_number, first_name, last_name }: CreateUserProps = args;
+
 			const checkEmail = await this.prisma.user.findFirst({
 				where: {
 					email,
@@ -151,13 +154,19 @@ export class UserRepository implements UserUseCases {
 			});
 
 			if (checkEmail) throw new Error('Email is already registered');
+
 			const checkPhoneNumber = await this.prisma.user.findFirst({
 				where: {
 					phone_number,
 				},
 			});
+
 			if (checkPhoneNumber) throw new Error('Phone number is already registered');
-			const res = await this.prisma.user.create({ data: args });
+
+			const fullName = first_name + ' ' + (last_name ? last_name : '');
+
+			const res = await this.prisma.user.create({ data: { ...args, full_name: fullName.trim() } });
+
 			return exclude(res, ['password']);
 		} catch (error) {
 			throw error;
