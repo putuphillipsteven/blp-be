@@ -62,7 +62,7 @@ model Transaction {
   transaction_detail Transaction_Detail[]
   booking            Booking?             @relation(fields: [booking_id], references: [id])
   booking_id         Int?
-  status             Status               @relation(fields: [status_id], references: [id])
+  status             Status?              @relation(fields: [status_id], references: [id])
   status_id          Int
   google_drive_link  String?
   created_at         DateTime             @default(now())
