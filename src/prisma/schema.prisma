@@ -14,7 +14,7 @@ model User {
   id                    Int            @id @default(autoincrement())
   first_name            String         @default("First Name")
   last_name             String?
-  phone_number          String         @default("081234567890")
+  phone_number          String         @unique @default("081234567890")
   second_phone_number   String?
   avatar_url            String?
   email                 String         @unique
