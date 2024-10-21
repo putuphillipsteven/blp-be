@@ -43,7 +43,7 @@ export interface ITransactionController {
 	delete(req: Request, res: Response, next: NextFunction): Promise<Transaction | undefined>;
 }
 
-export interface CreateTransactionWithDetailsProps extends TransactionProps {
+export interface CreateTransactionWithDetailsProps extends Transaction {
 	details: TransactionDetailsProps[];
 }
 

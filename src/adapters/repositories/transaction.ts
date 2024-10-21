@@ -172,14 +172,13 @@ export class TransactionRepository implements TransactionUseCases {
 
 			const createTransaction = await this.prisma.transaction.create({
 				data: {
+					...transactionData,
 					customer_name: customerFullName,
 					payment_amount: transactionData.payment_amount,
 					payment_change: transactionData.payment_amount - totalPrice,
-					payment_method_id: transactionData.payment_method_id,
 					total_price: totalPrice,
 					total_price_ppn: totalPrice + totalPrice * 0.1,
 					total_qty: totalQty,
-					user_id: transactionData.user_id,
 				},
 			});
 

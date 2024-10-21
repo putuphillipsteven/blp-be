@@ -15,5 +15,8 @@ export class Transaction implements PrismaTransaction {
 		public created_at: Date,
 		public updated_at: Date | null,
 		public deleted_at: Date | null,
+		public booking_id: number | null,
+		public status_id: number,
+		public google_drive_link: string,
 	) {}
 }

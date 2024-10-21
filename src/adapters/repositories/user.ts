@@ -122,13 +122,20 @@ export class UserRepository implements UserUseCases {
 	}
 	async create(args: CreateUserProps): Promise<any | undefined> {
 		try {
-			const { email }: CreateUserProps = args;
+			const { email, phone_number }: CreateUserProps = args;
 			const checkEmail = await this.prisma.user.findFirst({
 				where: {
 					email,
 				},
 			});
+
 			if (checkEmail) throw new Error('Email is already registered');
+			const checkPhoneNumber = await this.prisma.user.findFirst({
+				where: {
+					phone_number,
+				},
+			});
+			if (checkPhoneNumber) throw new Error('Phone number is already registered');
 			const res = await this.prisma.user.create({ data: args });
 			return exclude(res, ['password']);
 		} catch (error) {

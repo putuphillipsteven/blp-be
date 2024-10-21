@@ -14,6 +14,7 @@ const createUserValidations = [
 	body('first_name').notEmpty().withMessage('First name cant be empty'),
 	body('email').notEmpty().withMessage('Email cant be empty'),
 	body('email').isEmail().withMessage('Invalid email format'),
+	body('phone_number').notEmpty().withMessage('Phone number cant be empty'),
 	body('password')
 		.matches(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/)
 		.withMessage(
