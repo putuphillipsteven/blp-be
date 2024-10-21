@@ -99,6 +99,7 @@ export class UserRepository implements UserUseCases {
 					phone_number: true,
 					second_phone_number: true,
 					role_id: true,
+					is_verified: true,
 					role: {
 						select: {
 							id: true,

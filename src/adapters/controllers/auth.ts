@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomRequest, IAuthController } from '../../use-cases/interfaces/auth';
+import { IAuthController, VerifyTokenWithUserProps } from '../../use-cases/interfaces/auth';
 import { AuthInteractor } from '../../use-cases/interactor/auth';
 import { sendResponse } from '../../utils/utilts';
-import { IVerifyTokenReq } from '../../middleware/auth';
 
 export class AuthController implements IAuthController {
 	private interactor: AuthInteractor;
@@ -13,7 +12,7 @@ export class AuthController implements IAuthController {
 		throw new Error('Method not implemented.');
 	}
 	async keepLogin(
-		req: IVerifyTokenReq,
+		req: VerifyTokenWithUserProps,
 		res: Response,
 		next: NextFunction,
 	): Promise<any | undefined> {

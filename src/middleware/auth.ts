@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { VerifyTokenWithUserProps } from '../use-cases/interfaces/auth';
 
-export interface IVerifyTokenReq extends Request {
-	user?: any;
-}
-export const verifyToken: any = (req: IVerifyTokenReq, res: Response, next: NextFunction) => {
+export const verifyToken: any = (
+	req: VerifyTokenWithUserProps,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		let token = req.headers.authorization;
 
@@ -25,7 +27,7 @@ export const verifyToken: any = (req: IVerifyTokenReq, res: Response, next: Next
 };
 
 export const checkRoleEmployeeOrManager: any = (
-	req: IVerifyTokenReq,
+	req: VerifyTokenWithUserProps,
 	res: Response,
 	next: NextFunction,
 ) => {

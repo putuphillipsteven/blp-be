@@ -3,11 +3,12 @@ import { ParsedQs } from 'qs';
 import { sendResponse } from '../../utils/utilts';
 import {
 	GetTransactionFilters,
-	GetTransactionReturnProps,
 	ITransactionController,
 } from '../../use-cases/interfaces/transaction';
 import { TransactionInteractor } from '../../use-cases/interactor/transaction';
 import { Transaction } from '../../entities/transaction';
+import { RequestWithUserProps } from '../../use-cases/interfaces/auth';
+
 export class TransactionController implements ITransactionController {
 	private interactor: TransactionInteractor;
 	constructor(interactor: TransactionInteractor) {
@@ -20,9 +21,16 @@ export class TransactionController implements ITransactionController {
 		throw new Error('Method not implemented.');
 	}
 
-	public async create(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+	public async create(
+		req: RequestWithUserProps,
+		res: Response,
+		next: NextFunction,
+	): Promise<any | undefined> {
 		try {
-			const result = await this.interactor.create(req.body);
+			const { user_id }: any = 1;
+			console.log('req.user: ', req.user);
+			console.log('user_id: ', user_id);
+			const result = await this.interactor.create({ ...req.body, user_id });
 			return sendResponse(res, 200, 'Create Transaction Success', result);
 		} catch (err) {
 			next(err);
