@@ -26,6 +26,13 @@ export const verifyToken: any = (
 	}
 };
 
+export const refreshToken = (req: VerifyTokenWithUserProps, res: Response, next: NextFunction) => {
+	try {
+	} catch (error) {
+		return res.status(500).send({ message: 'Invalid Token' });
+	}
+};
+
 export const checkRoleEmployeeOrManager: any = (
 	req: VerifyTokenWithUserProps,
 	res: Response,

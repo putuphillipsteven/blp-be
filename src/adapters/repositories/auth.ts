@@ -61,7 +61,11 @@ export class AuthRepository implements AuthUseCases {
 				expiresIn: '1h',
 			});
 
-			return { user: exclude(isUserExist, ['password']), token };
+			const refreshToken = jwt.sign(payload, jwtSecretKey, {
+				expiresIn: '30d',
+			});
+
+			return { user: exclude(isUserExist, ['password']), token, refreshToken };
 		} catch (error) {
 			throw error;
 		}
