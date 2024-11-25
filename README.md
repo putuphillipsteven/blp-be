@@ -18,4 +18,4 @@ Not only that, user that have a request, like, which photo that gonna be editted
 ### Generate hexa key
 
 I'm gonna start from generate random hexa key.
-You need to run a command `openssl rand -hex16`, i run this on `Git Bash`
+You need to run a command `openssl rand -hex 16`, i run this on `Git Bash`

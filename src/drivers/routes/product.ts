@@ -24,7 +24,7 @@ const updateProductValidations = [
 ];
 
 router.get('/', controller.get.bind(controller));
-router.get('/:id', controller.getDetails.bind(controller));
+router.get('/:anjeng', controller.getDetails.bind(controller));
 router.post(
 	'/create',
 	verifyToken,

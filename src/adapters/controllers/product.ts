@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
 import {
+	CreateProductRequest,
 	DeleteProductProps,
 	GetProductFilterProps,
 	IProductController,
@@ -15,6 +16,7 @@ export class ProductController implements IProductController {
 	constructor(interactor: ProductInteractor) {
 		this.interactor = interactor;
 	}
+
 	async getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
@@ -74,7 +76,7 @@ export class ProductController implements IProductController {
 		}
 	}
 
-	async create(req: Request, res: Response, next: NextFunction) {
+	async create(req: CreateProductRequest, res: Response, next: NextFunction) {
 		try {
 			const data = await this.interactor.create({
 				...req.body,

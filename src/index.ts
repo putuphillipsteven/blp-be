@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import router from './router';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import swaggerOutput from './swagger_output.json';
 
 dotenv.config({
 	path: path.resolve(__dirname, '../.env'),
@@ -13,6 +15,8 @@ dotenv.config({
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -35,6 +39,8 @@ app.use('/api', router);
 app.use('/api/uploads', express.static(path.join(__dirname, './public/images')));
 
 app.use(errorHandler);
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 app.listen(port, () => {
 	console.log(`Server started on port : [${port}]`);
