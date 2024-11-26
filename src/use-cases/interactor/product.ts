@@ -1,5 +1,5 @@
 import { ProductRepository } from '../../adapters/repositories/product';
-import { Product } from '../../entities/product';
+import { Product } from '@prisma/client';
 import {
 	CreateProductProps,
 	DeleteProductProps,

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Product } from '../../entities/product';
+import { Product } from '@prisma/client';
 
 export interface ProductUseCases {
 	get(args: GetProductFilterProps): Promise<GetProductReturnProps | undefined>;

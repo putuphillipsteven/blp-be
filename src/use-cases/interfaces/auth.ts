@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../../entities/user';
+import { User } from '@prisma/client';
 
 export interface VerifyTokenWithUserProps extends Request {
 	user?: any;
@@ -8,8 +8,6 @@ export interface VerifyTokenWithUserProps extends Request {
 export interface RequestWithUserProps extends Request {
 	user?: any;
 }
-
-export interface CreateUserProps extends User {}
 
 export type LoginReturnUserProps = Omit<User, 'password'>;
 

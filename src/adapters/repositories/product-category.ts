@@ -7,7 +7,7 @@ import {
 	ProductCategoryUseCases,
 	GetProductDetailsProps,
 } from '../../use-cases/interfaces/product-category';
-import { ProductCategory } from '../../entities/product-category';
+import {ProductCategoryDTO} from "../../utils/dto/product-category";
 
 export class ProductCategoryRepository implements ProductCategoryUseCases {
 	private prisma: PrismaClient;
@@ -28,6 +28,7 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 			return false;
 		}
 	}
+
 	async getDetails(args: GetProductDetailsProps): Promise<any | null> {
 		try {
 			const res = await this.get();
@@ -41,7 +42,8 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 			throw error;
 		}
 	}
-	async create(args: CreateProductCategoryProps): Promise<ProductCategory | undefined> {
+
+	async create(args: CreateProductCategoryProps): Promise<Product_Category | undefined> {
 		try {
 			const res = await this.prisma.product_Category.create({ data: args });
 
@@ -58,8 +60,8 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 				},
 			});
 
-			const buildNestedCategories = (categories: ProductCategory[]): ProductCategory[] => {
-				const categoryMap: { [key: number]: ProductCategory } = {};
+			const buildNestedCategories = (categories: Product_Category[]): Product_Category[] => {
+				const categoryMap: { [key: number]: ProductCategoryDTO } = {};
 
 				// Map each category by id
 				categories.forEach((category) => {
@@ -67,7 +69,7 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 				});
 
 				// Build the nested structure
-				const nestedCategories: ProductCategory[] = [];
+				const nestedCategories: Product_Category[] = [];
 
 				categories.forEach((category) => {
 					if (category.parent_id === null) {

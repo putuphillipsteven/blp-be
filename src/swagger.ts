@@ -1,5 +1,4 @@
 import swaggerAutogen from 'swagger-autogen';
-import { Product } from './entities/product';
 
 const doc = {
 	info: {
@@ -18,12 +17,6 @@ const doc = {
 			bearerAuth: {
 				type: 'http',
 				scheme: 'bearer',
-			},
-		},
-		schemas: {
-			CreateProductRequest: {
-				type: 'object',
-				properties: Product,
 			},
 		},
 	},

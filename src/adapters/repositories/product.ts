@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Product } from '../../entities/product';
+import { Product } from '@prisma/client';
 import {
 	CreateProductProps,
 	DeleteProductProps,

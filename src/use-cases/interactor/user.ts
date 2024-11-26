@@ -1,5 +1,5 @@
 import { UserRepository } from '../../adapters/repositories/user';
-import { User } from '../../entities/user';
+import { User } from '@prisma/client';
 import {
 	CreateUserProps,
 	GetUserDetailsProps,

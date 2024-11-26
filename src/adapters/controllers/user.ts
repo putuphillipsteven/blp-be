@@ -9,6 +9,7 @@ import { UserInteractor } from '../../use-cases/interactor/user';
 import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
 import bcrypt from 'bcrypt';
+import {ResponseHandler} from "../../utils/response-handler";
 
 export class UserController implements IUserController {
 	private interactor: UserInteractor;
@@ -23,7 +24,10 @@ export class UserController implements IUserController {
 				id: Number(id),
 			};
 			const result = await this.interactor.getDetails(args);
-			return sendResponse(res, 200, 'Get User Details Success', result);
+
+			const response = ResponseHandler.generateResponse(200, result);
+			res.json(response); // Send the response
+
 		} catch (error) {
 			next(error);
 		}

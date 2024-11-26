@@ -7,7 +7,7 @@ import {
 	UpdateTransactionProps,
 } from '../../use-cases/interfaces/transaction';
 import { TransactionInteractor } from '../../use-cases/interactor/transaction';
-import { Transaction } from '../../entities/transaction';
+import { Transaction } from '@prisma/client';
 import { RequestWithUserProps } from '../../use-cases/interfaces/auth';
 
 export class TransactionController implements ITransactionController {

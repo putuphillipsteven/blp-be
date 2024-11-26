@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Transaction } from '../../entities/transaction';
-import { TransactionDetail } from '../../entities/transaction-details';
+import {Transaction, Transaction_Detail} from '@prisma/client';
 
 export interface GetTransactionReturnProps {
 	total: number;
@@ -16,7 +15,7 @@ export interface GetTransactionFilters {
 }
 
 export interface CreateTransactionWithDetailsProps extends Transaction {
-	details: TransactionDetail[];
+	details: Transaction_Detail[];
 }
 
 export interface UpdateTransactionProps {
@@ -28,7 +27,7 @@ export interface UpdateTransactionProps {
 	booking_id?: number;
 	status_id?: number;
 	google_drive_link?: string;
-	details: TransactionDetail[];
+	details: Transaction_Detail[];
 }
 
 export interface TransactionUseCases {

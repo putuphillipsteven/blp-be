@@ -1,5 +1,5 @@
 import { TransactionRepository } from '../../adapters/repositories/transaction';
-import { Transaction } from '../../entities/transaction';
+import { Transaction } from '@prisma/client';
 import {
 	CreateTransactionWithDetailsProps,
 	GetTransactionFilters,

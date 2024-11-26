@@ -1,4 +1,4 @@
-import { ProductCategory } from '../../entities/product-category';
+import { Product_Category } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 
 export interface IProductCategoryController {
@@ -11,17 +11,17 @@ export interface IProductCategoryController {
 
 export interface ProductCategoryUseCases {
 	get(): Promise<GetProductCategoryReturnProps | undefined>;
-	getDetails(args: GetProductDetailsProps): Promise<ProductCategory | null>;
-	create(args: CreateProductCategoryProps): Promise<ProductCategory | undefined>;
-	update(args: UpdateProductCategoryProps): Promise<ProductCategory | undefined>;
-	delete(args: DeleteProductCategoryProps): Promise<ProductCategory | undefined>;
+	getDetails(args: GetProductDetailsProps): Promise<Product_Category | null>;
+	create(args: CreateProductCategoryProps): Promise<Product_Category | undefined>;
+	update(args: UpdateProductCategoryProps): Promise<Product_Category | undefined>;
+	delete(args: DeleteProductCategoryProps): Promise<Product_Category | undefined>;
 }
 
 export interface GetProductDetailsProps {
 	id: number;
 }
 
-export interface CreateProductCategoryProps extends ProductCategory {}
+export interface CreateProductCategoryProps extends Product_Category {}
 
 export interface DeleteProductCategoryProps {
 	id: number;
@@ -34,5 +34,5 @@ export interface UpdateProductCategoryProps {
 }
 
 export interface GetProductCategoryReturnProps {
-	data: any[];
+	data: Product_Category[];
 }

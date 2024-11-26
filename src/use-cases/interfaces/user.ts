@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '../../entities/user';
+import { User } from '@prisma/client';
 
 export type ReturnUserProps = Omit<
 	User,

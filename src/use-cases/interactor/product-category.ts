@@ -1,14 +1,12 @@
 import { Product_Category } from '@prisma/client';
 import {
-	GetProductCategoryReturnProps,
 	CreateProductCategoryProps,
 	UpdateProductCategoryProps,
 	DeleteProductCategoryProps,
 	ProductCategoryUseCases,
-	GetProductDetailsProps,
+	GetProductDetailsProps, GetProductCategoryReturnProps,
 } from '../interfaces/product-category';
 import { ProductCategoryRepository } from '../../adapters/repositories/product-category';
-import { ProductCategory } from '../../entities/product-category';
 
 export class ProductCategoryInteractor implements ProductCategoryUseCases {
 	private repository: ProductCategoryRepository;
@@ -33,6 +31,7 @@ export class ProductCategoryInteractor implements ProductCategoryUseCases {
 			throw error;
 		}
 	}
+
 	async create(args: CreateProductCategoryProps): Promise<Product_Category | undefined> {
 		try {
 			const res = await this.repository.create(args);
