@@ -13,9 +13,11 @@ export class AuthInteractor implements AuthUseCases {
 	constructor(repository: AuthRepository) {
 		this.repository = repository;
 	}
+
 	async googleLogin(): Promise<any | undefined> {
 		throw new Error('Method not implemented.');
 	}
+
 	async keepLogin(args: KeepLoginProps): Promise<any | undefined> {
 		try {
 			const res = await this.repository.keepLogin(args);

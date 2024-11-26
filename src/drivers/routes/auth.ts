@@ -17,7 +17,7 @@ const controller = new AuthController(interactor);
 
 const router = express.Router();
 
-router.post('/login', validator(loginValidator), controller.login.bind(controller));
-router.get('/keep-login', verifyToken, controller.keepLogin.bind(controller));
+router.post('/v1/auth/login', validator(loginValidator), controller.login.bind(controller));
+router.get('/v1/auth/keep-login', verifyToken, controller.keepLogin.bind(controller));
 
 export default router;

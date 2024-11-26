@@ -19,10 +19,10 @@ const createTransactionValidations = [
 	body('details').notEmpty().withMessage('Please select a product first'),
 ];
 
-router.get('/', controller.get.bind(controller));
-router.patch('/', verifyToken, controller.update.bind(controller));
+router.get('/v1/transactions', controller.get.bind(controller));
+router.patch('/v1/transactions', verifyToken, controller.update.bind(controller));
 router.post(
-	'/create',
+	'/v1/transactions',
 	verifyToken,
 	validator(createTransactionValidations),
 	controller.create.bind(controller),

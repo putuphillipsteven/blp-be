@@ -10,6 +10,10 @@ const controller = new ProductImageController(interactor);
 
 const router = express.Router();
 
-router.post('/create', uploadProductImageFile, controller.onCreateProductImage.bind(controller));
+router.post(
+	'/v1/product-images',
+	uploadProductImageFile,
+	controller.onCreateProductImage.bind(controller),
+);
 
 export default router;

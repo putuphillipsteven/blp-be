@@ -8,16 +8,16 @@ import productImageRoute from './drivers/routes/product-image';
 
 const router = Router();
 
-router.use('/products', productRoute);
+router.use('/', productRoute);
 
-router.use('/product-categories', productCategoriesRoute);
+router.use('/', productCategoriesRoute);
 
-router.use('/transactions', transactionRoute);
+router.use('/', transactionRoute);
 
-router.use('/auth', authRoute);
+router.use('/', authRoute);
 
-router.use('/users', userRoute);
+router.use('/', userRoute);
 
-router.use('/product-images', productImageRoute);
+router.use('/', productImageRoute);
 
 export default router;
