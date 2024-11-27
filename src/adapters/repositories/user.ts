@@ -8,12 +8,42 @@ import {
 	UserUseCases,
 } from '../../use-cases/interfaces/user';
 import { exclude } from '../../utils/exclude-password';
-import user from "../../drivers/routes/user";
 
 export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;
+
+	private whereFilter: any;
+
 	constructor() {
 		this.prisma = new PrismaClient();
+		this.whereFilter = {};
+	}
+
+	setWhereFilterForNameAndPhoneNumber(name: String, phone_number: String) {
+		this.whereFilter.AND = [
+			{
+				full_name: {
+					contains: name,
+				}
+			},
+			{
+				phone_number: {
+					contains: phone_number,
+				},
+			},
+		];
+	}
+
+	setWhereFilterForName(name: String) {
+		this.whereFilter.full_name = {
+			contains: name,
+		}
+	}
+
+	setWhereFilterForPhoneNumber(phone_number: String) {
+		this.whereFilter.phone_number = {
+			contains: phone_number,
+		};
 	}
 
 	async getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | any | null> {
@@ -59,12 +89,7 @@ export class UserRepository implements UserUseCases {
 
 			const take = Number(page_size);
 
-			interface RolesDTO {
-				role_id?: {
-					equals: number;
-				};
-			}
-			const roles = {} as RolesDTO;
+			const roles = {} as any;
 
 			if (role_id) {
 				roles.role_id = {
@@ -72,58 +97,22 @@ export class UserRepository implements UserUseCases {
 				};
 			}
 
-			interface WhereDTO {
-				AND?: [{
-
-				}]
-			}
-			const where = { ...roles } as any;
+			this.whereFilter = { ...roles };
 
 			if (name && phone_number) {
-				where.AND = [
-					{
-						OR: [
-							{
-								first_name: {
-									contains: name,
-								},
-							},
-							{
-								last_name: {
-									contains: name,
-								},
-							},
-						],
-					},
-					{
-						phone_number: {
-							contains: phone_number,
-						},
-					},
-				];
+				this.setWhereFilterForNameAndPhoneNumber(name, phone_number);
 			} else if (name) {
-				where.OR = [
-					{
-						first_name: {
-							contains: name,
-						},
-					},
-					{
-						last_name: {
-							contains: name,
-						},
-					},
-				];
+				this.setWhereFilterForName(name);
 			} else if (phone_number) {
-				where.phone_number = {
-					contains: phone_number,
-				};
+				this.setWhereFilterForPhoneNumber(phone_number);
 			}
+
+			console.log("Where: ", JSON.stringify(this.whereFilter, null, 2))
 
 			const users: UserDTO[] = await this.prisma.user.findMany({
 				skip,
 				take,
-				where: where,
+				where: this.whereFilter,
 				orderBy: {
 					first_name: 'asc',
 				},
@@ -153,9 +142,12 @@ export class UserRepository implements UserUseCases {
 				},
 			});
 
-			const totalDatum = await  this.prisma.user.count();
+			const totalDatum = await  this.prisma.user.count({where: this.whereFilter});
+
 			const totalPages = Math.ceil(totalDatum / page_size);
+
 			const currentPage = page;
+
 			return {
 				total_datum: totalDatum,
 				total_pages: totalPages,
