@@ -50,12 +50,21 @@ export class UserRepository implements UserUseCases {
 	async get(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
 		try {
 			let { name, phone_number, role_id, page, page_size }: GetUserProps = args;
+
 			page = page ? page : 1;
+
 			page_size = page_size ? page_size : 10;
 
 			const skip = (Number(page) - 1) * Number(page_size);
+
 			const take = Number(page_size);
-			const roles = {} as any;
+
+			interface RolesDTO {
+				role_id?: {
+					equals: number;
+				};
+			}
+			const roles = {} as RolesDTO;
 
 			if (role_id) {
 				roles.role_id = {
@@ -63,6 +72,11 @@ export class UserRepository implements UserUseCases {
 				};
 			}
 
+			interface WhereDTO {
+				AND?: [{
+
+				}]
+			}
 			const where = { ...roles } as any;
 
 			if (name && phone_number) {
