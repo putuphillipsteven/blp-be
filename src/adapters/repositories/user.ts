@@ -2,13 +2,13 @@ import { PrismaClient } from '@prisma/client';
 import {
 	CreateUserProps,
 	GetUserDetailsProps,
-	GetUserProps,
-	ReturnUserProps,
+	GetUserProps, ReturnUserDTO,
 	UpdateUserProps,
-	UserDetailsReturnProps,
+	UserDetailsReturnProps, UserDTO,
 	UserUseCases,
 } from '../../use-cases/interfaces/user';
 import { exclude } from '../../utils/exclude-password';
+import user from "../../drivers/routes/user";
 
 export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;
@@ -19,11 +19,13 @@ export class UserRepository implements UserUseCases {
 	async getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | any | null> {
 		try {
 			const { id } = args;
+
 			const res = await this.prisma.user.findFirst({
 				where: {
 					id,
 				},
 			});
+
 			if (res) {
 				return exclude(res, ['password']);
 			} else {
@@ -45,7 +47,7 @@ export class UserRepository implements UserUseCases {
 		}
 	}
 
-	async get(args: GetUserProps): Promise<ReturnUserProps[] | undefined> {
+	async get(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
 		try {
 			let { name, phone_number, role_id, page, page_size }: GetUserProps = args;
 			page = page ? page : 1;
@@ -104,7 +106,7 @@ export class UserRepository implements UserUseCases {
 				};
 			}
 
-			const res = await this.prisma.user.findMany({
+			const users: UserDTO[] = await this.prisma.user.findMany({
 				skip,
 				take,
 				where: where,
@@ -136,7 +138,16 @@ export class UserRepository implements UserUseCases {
 					},
 				},
 			});
-			return res;
+
+			const totalDatum = await  this.prisma.user.count();
+			const totalPages = Math.ceil(totalDatum / page_size);
+			const currentPage = page;
+			return {
+				total_datum: totalDatum,
+				total_pages: totalPages,
+				current_page: currentPage,
+				data: users
+			};
 		} catch (error) {
 			throw error;
 		}

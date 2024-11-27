@@ -10,6 +10,7 @@ import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
 import bcrypt from 'bcrypt';
 import {ResponseHandler} from "../../utils/response-handler";
+import {PaginationDTO} from "../../utils/dto/paginationdto";
 
 export class UserController implements IUserController {
 	private interactor: UserInteractor;
@@ -25,9 +26,7 @@ export class UserController implements IUserController {
 			};
 			const result = await this.interactor.getDetails(args);
 
-			const response = ResponseHandler.generateResponse(200, result);
-			res.json(response); // Send the response
-
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}
@@ -36,6 +35,7 @@ export class UserController implements IUserController {
 	async get(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { name, phone_number, role_id, page, page_size } = req.query as ParsedQs & GetUserProps;
+
 			const args: GetUserProps = {
 				name,
 				phone_number,
@@ -43,9 +43,22 @@ export class UserController implements IUserController {
 				page: Number(page),
 				page_size: Number(page_size),
 			};
+
 			const data = await this.interactor.get(args);
-			return sendResponse(res, 200, 'Get User Success', data);
-		} catch (error) {
+
+			const users = data?.data;
+
+			const totalPages = data?.total_pages;
+
+			const totalDatum = data?.total_datum;
+
+			const currentPage = data?.current_page;
+
+			const paginationDTO = new PaginationDTO(totalDatum, currentPage, totalPages);
+
+			return  ResponseHandler.generateResponse(res, 200, users, paginationDTO);
+		}
+		catch (error) {
 			next(error);
 		}
 	}

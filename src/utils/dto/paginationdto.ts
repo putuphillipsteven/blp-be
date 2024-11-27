@@ -1,5 +1,8 @@
-export interface PaginationDTO {
-    total_datum: number;
-    current_page: number;
-    total_page: number;
+export class PaginationDTO {
+    constructor(
+        public totalDatum?: number,
+        public totalPages?: number,
+        public currentPage?: number
+    ) {
+    }
 }

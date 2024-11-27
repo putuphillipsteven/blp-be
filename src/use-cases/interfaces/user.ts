@@ -1,10 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
 import { User } from '@prisma/client';
 
-export type ReturnUserProps = Omit<
+export type UserDTO = Omit<
 	User,
 	'password' | 'created_at' | 'deleted_at' | 'updated_at' | 'gender_id'
 >;
+
+export interface ReturnUserDTO  {
+	total_datum: number,
+	current_page: number,
+	total_pages: number,
+	data?: UserDTO[] | undefined;
+}
 
 export interface GetUserProps {
 	name: string;
@@ -25,11 +32,11 @@ export interface GetUserDetailsProps {
 }
 
 export interface UserUseCases {
-	get(args: GetUserProps): Promise<ReturnUserProps[] | undefined>;
+	get(args: GetUserProps): Promise<ReturnUserDTO | undefined>;
 	getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null>;
-	create(args: CreateUserProps): Promise<ReturnUserProps | undefined>;
-	update(args: any): Promise<ReturnUserProps | undefined>;
-	delete(args: any): Promise<ReturnUserProps | undefined>;
+	create(args: CreateUserProps): Promise<UserDTO | undefined>;
+	update(args: any): Promise<UserDTO | undefined>;
+	delete(args: any): Promise<void>;
 	createWithGoogle(args: CreateUserProps): Promise<any | undefined>;
 }
 

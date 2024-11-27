@@ -3,8 +3,7 @@ import { User } from '@prisma/client';
 import {
 	CreateUserProps,
 	GetUserDetailsProps,
-	GetUserProps,
-	ReturnUserProps,
+	GetUserProps, ReturnUserDTO,
 	UpdateUserProps,
 	UserUseCases,
 } from '../interfaces/user';
@@ -32,7 +31,7 @@ export class UserInteractor implements UserUseCases {
 			throw error;
 		}
 	}
-	async get(args: GetUserProps): Promise<ReturnUserProps[] | undefined> {
+	async get(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
 		try {
 			const res = await this.repository.get(args);
 			return res;
@@ -56,7 +55,7 @@ export class UserInteractor implements UserUseCases {
 			throw error;
 		}
 	}
-	async delete(args: any): Promise<User | undefined> {
+	async delete(args: any): Promise<void> {
 		try {
 			const res = await this.repository.delete(args);
 			return res;

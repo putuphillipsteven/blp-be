@@ -1,20 +1,23 @@
 import {PaginationDTO} from "./dto/paginationdto";
+import {Response} from "express";
 
 export class ResponseHandler {
-    public static generateResponse(statusCode: number, data: {} | null ): {};
+    public static generateResponse(res: Response, statusCode: number, data: any | null ): Response;
 
-    public static generateResponse(statusCode: number, data: {} | null, pagination: PaginationDTO ): {};
+    public static generateResponse(res: Response, statusCode: number, data: any | null, pagination: PaginationDTO ): Response;
 
-    public static generateResponse(statusCode: number, data: {} | null, pagination?: PaginationDTO ) {
-        let response: any = {
-            status: statusCode,
-            data
-        }
+    public static generateResponse(res: Response, statusCode: number, data: any | null, pagination?: PaginationDTO ) {
+        let JSONResponse: any = {}
 
         if(pagination) {
-            response.pagination = pagination;
-        }
+            JSONResponse.status = statusCode;
+            JSONResponse.pagination = pagination;
+            JSONResponse.data = data;
+        } else {
+                JSONResponse.status = statusCode,
+                JSONResponse.data = data
+            }
 
-        return response;
+        return res.json(JSONResponse);
     }
 }
