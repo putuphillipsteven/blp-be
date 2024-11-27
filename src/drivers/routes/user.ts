@@ -23,10 +23,10 @@ const createUserValidations = [
 ];
 const router = express.Router();
 
-router.get('/v1/users', controller.get.bind(controller));
-router.get('/v1/users/details/:id', controller.getDetails.bind(controller));
-router.post('/v1/users', validator(createUserValidations), controller.create.bind(controller));
-router.patch('/v1/users/:id', uploadAvatarFile, controller.update.bind(controller));
-router.delete('/v1/users/:id', controller.delete.bind(controller));
+router.get('/v1/users', controller.getUsers.bind(controller));
+router.get('/v1/users/details/:id', controller.getUserDetails.bind(controller));
+router.post('/v1/users', validator(createUserValidations), controller.createUser.bind(controller));
+router.patch('/v1/users/:id', uploadAvatarFile, controller.updateUser.bind(controller));
+router.delete('/v1/users/:id', controller.deleteUser.bind(controller));
 
 export default router;

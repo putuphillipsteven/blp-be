@@ -46,7 +46,7 @@ export class UserRepository implements UserUseCases {
 		};
 	}
 
-	async getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | any | null> {
+	async getUserDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | any | null> {
 		try {
 			const { id } = args;
 
@@ -66,7 +66,7 @@ export class UserRepository implements UserUseCases {
 		}
 	}
 
-	async createWithGoogle(args: CreateUserProps): Promise<any | undefined> {
+	async createUserWithGoogle(args: CreateUserProps): Promise<any | undefined> {
 		try {
 			const res = await this.prisma.user.create({
 				data: args,
@@ -77,7 +77,7 @@ export class UserRepository implements UserUseCases {
 		}
 	}
 
-	async get(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
+	async getUsers(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
 		try {
 			let { name, phone_number, role_id, page, page_size }: GetUserProps = args;
 
@@ -107,7 +107,6 @@ export class UserRepository implements UserUseCases {
 				this.setWhereFilterForPhoneNumber(phone_number);
 			}
 
-			console.log("Where: ", JSON.stringify(this.whereFilter, null, 2))
 
 			const users: UserDTO[] = await this.prisma.user.findMany({
 				skip,
@@ -159,7 +158,7 @@ export class UserRepository implements UserUseCases {
 		}
 	}
 
-	async create(args: CreateUserProps): Promise<any | undefined> {
+	async createUser(args: CreateUserProps): Promise<any | undefined> {
 		try {
 			const { email, phone_number, first_name, last_name }: CreateUserProps = args;
 
@@ -188,7 +187,8 @@ export class UserRepository implements UserUseCases {
 			throw error;
 		}
 	}
-	async update(args: UpdateUserProps): Promise<any | undefined> {
+
+	async updateUser(args: UpdateUserProps): Promise<any | undefined> {
 		try {
 			const argsToUpdate: any = {};
 			const {
@@ -216,7 +216,8 @@ export class UserRepository implements UserUseCases {
 			throw error;
 		}
 	}
-	async delete(args: any): Promise<any | undefined> {
+
+	async deleteUser(args: any): Promise<any | undefined> {
 		try {
 			const { id } = args;
 			const res = await this.prisma.user.delete({

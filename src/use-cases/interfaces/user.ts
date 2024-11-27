@@ -32,18 +32,18 @@ export interface GetUserDetailsProps {
 }
 
 export interface UserUseCases {
-	get(args: GetUserProps): Promise<ReturnUserDTO | undefined>;
-	getDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null>;
-	create(args: CreateUserProps): Promise<UserDTO | undefined>;
-	update(args: any): Promise<UserDTO | undefined>;
-	delete(args: any): Promise<void>;
-	createWithGoogle(args: CreateUserProps): Promise<any | undefined>;
+	getUsers(args: GetUserProps): Promise<ReturnUserDTO | undefined>;
+	getUserDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null>;
+	createUser(args: CreateUserProps): Promise<UserDTO | undefined>;
+	updateUser(args: any): Promise<UserDTO | undefined>;
+	deleteUser(args: any): Promise<void>;
+	createUserWithGoogle(args: CreateUserProps): Promise<any | undefined>;
 }
 
 export interface IUserController {
-	get(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	create(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	update(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
-	delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	getUsers(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	getUserDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	createUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	updateUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	deleteUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
 }

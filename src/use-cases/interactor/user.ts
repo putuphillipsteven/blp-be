@@ -14,50 +14,50 @@ export class UserInteractor implements UserUseCases {
 		this.repository = repository;
 	}
 
-	async getDetails(args: GetUserDetailsProps): Promise<User | null> {
+	async getUserDetails(args: GetUserDetailsProps): Promise<User | null> {
 		try {
-			const res = await this.repository.getDetails(args);
+			const res = await this.repository.getUserDetails(args);
 			return res;
 		} catch (error) {
 			throw error;
 		}
 	}
 
-	async createWithGoogle(args: CreateUserProps): Promise<any | undefined> {
+	async createUserWithGoogle(args: CreateUserProps): Promise<any | undefined> {
 		try {
-			const res = await this.repository.createWithGoogle(args);
+			const res = await this.repository.createUserWithGoogle(args);
 			return res;
 		} catch (error) {
 			throw error;
 		}
 	}
-	async get(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
+	async getUsers(args: GetUserProps): Promise<ReturnUserDTO | undefined> {
 		try {
-			const res = await this.repository.get(args);
+			const res = await this.repository.getUsers(args);
 			return res;
 		} catch (error) {
 			throw error;
 		}
 	}
-	async create(args: CreateUserProps): Promise<User | undefined> {
+	async createUser(args: CreateUserProps): Promise<User | undefined> {
 		try {
-			const res = await this.repository.create(args);
+			const res = await this.repository.createUser(args);
 			return res;
 		} catch (error) {
 			throw error;
 		}
 	}
-	async update(args: UpdateUserProps): Promise<User | undefined> {
+	async updateUser(args: UpdateUserProps): Promise<User | undefined> {
 		try {
-			const res = await this.repository.update(args);
+			const res = await this.repository.updateUser(args);
 			return res;
 		} catch (error) {
 			throw error;
 		}
 	}
-	async delete(args: any): Promise<void> {
+	async deleteUser(args: any): Promise<void> {
 		try {
-			const res = await this.repository.delete(args);
+			const res = await this.repository.deleteUser(args);
 			return res;
 		} catch (error) {
 			throw error;

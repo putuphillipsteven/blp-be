@@ -18,13 +18,13 @@ export class UserController implements IUserController {
 		this.interactor = interactor;
 	}
 
-	async getDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+	async getUserDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
 			const args: GetUserDetailsProps = {
 				id: Number(id),
 			};
-			const result = await this.interactor.getDetails(args);
+			const result = await this.interactor.getUserDetails(args);
 
 			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
@@ -32,7 +32,7 @@ export class UserController implements IUserController {
 		}
 	}
 
-	async get(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+	async getUsers(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { name, phone_number, role_id, page, page_size } = req.query as ParsedQs & GetUserProps;
 
@@ -44,7 +44,7 @@ export class UserController implements IUserController {
 				page_size: Number(page_size),
 			};
 
-			const data = await this.interactor.get(args);
+			const data = await this.interactor.getUsers(args);
 
 			const users = data?.data;
 
@@ -54,39 +54,42 @@ export class UserController implements IUserController {
 
 			const currentPage = data?.current_page;
 
-			const paginationDTO = new PaginationDTO(totalDatum, currentPage, totalPages);
+			const paginationDTO = new PaginationDTO(totalDatum, totalPages, currentPage);
 
 			return  ResponseHandler.generateResponse(res, 200, users, paginationDTO);
-		}
+	}
 		catch (error) {
 			next(error);
 		}
 	}
-	async create(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+
+	async createUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const salt = await bcrypt.genSalt(10);
 			const hashPassword = await bcrypt.hash(req.body.password, salt);
-			const result = await this.interactor.create({ ...req.body, password: hashPassword });
+			const result = await this.interactor.createUser({ ...req.body, password: hashPassword });
 			return sendResponse(res, 200, 'Create User Success', result);
 		} catch (error) {
 			next(error);
 		}
 	}
-	async update(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+
+	async updateUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
 			const avatar_url = req?.file?.filename;
-			const data = await this.interactor.update({ ...req.body, id: Number(id), avatar_url });
+			const data = await this.interactor.updateUser({ ...req.body, id: Number(id), avatar_url });
 			return sendResponse(res, 200, 'Update User Success', data);
 		} catch (error) {
 			next(error);
 		}
 	}
-	async delete(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+
+	async deleteUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
 			const args = { id: Number(id) };
-			const data = await this.interactor.delete(args);
+			const data = await this.interactor.deleteUser(args);
 			return sendResponse(res, 200, 'Delete User Success', data);
 		} catch (error) {
 			next(error);
