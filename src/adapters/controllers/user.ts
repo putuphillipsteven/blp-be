@@ -13,20 +13,22 @@ import {ResponseHandler} from "../../utils/response-handler";
 import {PaginationDTO} from "../../utils/dto/paginationdto";
 
 export class UserController implements IUserController {
-	private interactor: UserInteractor;
-	constructor(interactor: UserInteractor) {
-		this.interactor = interactor;
+	private userInteractor: UserInteractor;
+	constructor(userInteractor: UserInteractor) {
+		this.userInteractor = userInteractor;
 	}
 
 	async getUserDetails(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
+
 			const args: GetUserDetailsProps = {
 				id: Number(id),
 			};
-			const result = await this.interactor.getUserDetails(args);
 
-			return ResponseHandler.generateResponse(res, 200, result);
+			const user = await this.userInteractor.getUserDetails(args);
+
+			return ResponseHandler.generateResponse(res, 200, user);
 		} catch (error) {
 			next(error);
 		}
@@ -44,7 +46,7 @@ export class UserController implements IUserController {
 				page_size: Number(page_size),
 			};
 
-			const data = await this.interactor.getUsers(args);
+			const data = await this.userInteractor.getUsers(args);
 
 			const users = data?.data;
 
@@ -66,9 +68,12 @@ export class UserController implements IUserController {
 	async createUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const salt = await bcrypt.genSalt(10);
+
 			const hashPassword = await bcrypt.hash(req.body.password, salt);
-			const result = await this.interactor.createUser({ ...req.body, password: hashPassword });
-			return sendResponse(res, 200, 'Create User Success', result);
+
+			const user = await this.userInteractor.createUser({ ...req.body, password: hashPassword });
+
+			return ResponseHandler.generateResponse(res, 200, user);
 		} catch (error) {
 			next(error);
 		}
@@ -77,9 +82,12 @@ export class UserController implements IUserController {
 	async updateUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
+
 			const avatar_url = req?.file?.filename;
-			const data = await this.interactor.updateUser({ ...req.body, id: Number(id), avatar_url });
-			return sendResponse(res, 200, 'Update User Success', data);
+
+			const user = await this.userInteractor.updateUser({ ...req.body, id: Number(id), avatar_url });
+
+			return ResponseHandler.generateResponse(res, 200, user);
 		} catch (error) {
 			next(error);
 		}
@@ -88,9 +96,12 @@ export class UserController implements IUserController {
 	async deleteUser(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { id } = req.params;
+
 			const args = { id: Number(id) };
-			const data = await this.interactor.deleteUser(args);
-			return sendResponse(res, 200, 'Delete User Success', data);
+
+			await this.userInteractor.deleteUser(args);
+
+			return ResponseHandler.generateResponse(res, 200);
 		} catch (error) {
 			next(error);
 		}
