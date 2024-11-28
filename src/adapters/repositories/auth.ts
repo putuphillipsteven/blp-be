@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { AuthUseCases, KeepLoginProps, LoginProps } from '../../use-cases/interfaces/auth';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { exclude } from '../../utils/exclude-password';
 
 export class AuthRepository implements AuthUseCases {
 	private prisma: PrismaClient;
@@ -24,9 +23,8 @@ export class AuthRepository implements AuthUseCases {
 					id,
 				},
 			});
-			if (res) {
-				return exclude(res, ['password']);
-			}
+
+			return res;
 		} catch (error) {
 			throw error;
 		}
@@ -65,7 +63,7 @@ export class AuthRepository implements AuthUseCases {
 				expiresIn: '30d',
 			});
 
-			return { user: exclude(isUserExist, ['password']), token, refreshToken };
+			return { user: isUserExist, token, refreshToken };
 		} catch (error) {
 			throw error;
 		}

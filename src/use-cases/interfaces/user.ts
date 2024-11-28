@@ -25,7 +25,7 @@ export interface CreateUserProps extends User {}
 
 export type UpdateUserProps = Omit<User, 'email' | 'password'>;
 
-export type UserDetailsReturnProps = Omit<User, 'password'>;
+export type UserDetailsReturnProps = Omit<User, 'password' | "created_at" | "deleted_at" | "updated_at" | "gender_id">;
 
 export interface GetUserDetailsProps {
 	id: number;

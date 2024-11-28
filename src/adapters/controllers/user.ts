@@ -3,10 +3,8 @@ import {
 	GetUserDetailsProps,
 	GetUserProps,
 	IUserController,
-	UpdateUserProps,
 } from '../../use-cases/interfaces/user';
 import { UserInteractor } from '../../use-cases/interactor/user';
-import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
 import bcrypt from 'bcrypt';
 import {ResponseHandler} from "../../utils/response-handler";

@@ -7,7 +7,6 @@ import {
 	UserDetailsReturnProps, UserDTO,
 	UserUseCases,
 } from '../../use-cases/interfaces/user';
-import { exclude } from '../../utils/exclude-password';
 
 export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;
@@ -46,7 +45,7 @@ export class UserRepository implements UserUseCases {
 		};
 	}
 
-	async getUserDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | any | null> {
+	async getUserDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null> {
 		try {
 			const { id } = args;
 
@@ -54,10 +53,34 @@ export class UserRepository implements UserUseCases {
 				where: {
 					id,
 				},
+				select: {
+					id: true,
+					first_name: true,
+					last_name: true,
+					full_name: true,
+					phone_number: true,
+					second_phone_number: true,
+					role_id: true,
+					is_verified: true,
+					role: {
+						select: {
+							id: true,
+							name: true,
+						},
+					},
+					avatar_url: true,
+					email: true,
+					gender: {
+						select: {
+							id: true,
+							gender_name: true,
+						},
+					},
+				},
 			});
 
 			if (res) {
-				return exclude(res, ['password']);
+				return res;
 			} else {
 				throw new Error('User Not Found');
 			}
@@ -183,7 +206,7 @@ export class UserRepository implements UserUseCases {
 
 			const res = await this.prisma.user.create({ data: { ...args, full_name: fullName.trim() } });
 
-			return exclude(res, ['password']);
+			return res;
 		} catch (error) {
 			throw error;
 		}
@@ -212,7 +235,7 @@ export class UserRepository implements UserUseCases {
 			if (gender_id) argsToUpdate.gender_id = Number(gender_id);
 
 			const res = await this.prisma.user.update({ where: { id }, data: argsToUpdate });
-			return exclude(res, ['password']);
+			return res;
 		} catch (error) {
 			throw error;
 		}
@@ -226,7 +249,6 @@ export class UserRepository implements UserUseCases {
 					id,
 				},
 			});
-			return exclude(res, ['password']);
 		} catch (error) {
 			throw error;
 		}

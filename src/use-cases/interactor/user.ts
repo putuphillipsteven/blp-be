@@ -14,7 +14,7 @@ export class UserInteractor implements UserUseCases {
 		this.repository = repository;
 	}
 
-	async getUserDetails(args: GetUserDetailsProps): Promise<User | null> {
+	async getUserDetails(args: GetUserDetailsProps): Promise<any | null> {
 		try {
 			const res = await this.repository.getUserDetails(args);
 			return res;
