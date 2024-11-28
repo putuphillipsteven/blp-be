@@ -7,9 +7,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import router from "../router";
 import { errorHandler } from "../middleware/error-handler";
-import { describe, it} from "node:test";
-import expect from "expect";
-import {afterAll, beforeAll} from "@jest/globals";
+import {afterAll, beforeAll, describe, it, expect} from "@jest/globals";
 
 // Load environment variables
 dotenv.config({
@@ -60,5 +58,6 @@ describe('GET /api/v1/users', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.data).toBeDefined();
         expect(res.body.data.length).toBeGreaterThan(0);
+        expect(res.body.data.length).toBeLessThanOrEqual(10);
     });
 });
