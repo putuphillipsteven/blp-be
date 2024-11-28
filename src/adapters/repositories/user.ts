@@ -153,6 +153,7 @@ export class UserRepository implements UserUseCases {
 				current_page: currentPage,
 				data: users
 			};
+
 		} catch (error) {
 			throw error;
 		}
