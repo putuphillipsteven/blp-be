@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { sendResponse } from '../../utils/utilts';
 import { IProductImageController } from '../../use-cases/interfaces/product-image.interface';
 import { ProductImageInteractor } from '../../use-cases/interactor/product-image.interactor';
+import {ResponseHandler} from "../../utils/response-handler";
 
 export class ProductImageController implements IProductImageController {
 	private interactor: ProductImageInteractor;
@@ -22,7 +23,7 @@ export class ProductImageController implements IProductImageController {
 				image_url: imageUrl,
 			});
 
-			return sendResponse(res, 200, 'Create Product Image Success', data);
+			return ResponseHandler.generateResponse(res, 200, data);
 		} catch (error) {
 			next(error);
 		}

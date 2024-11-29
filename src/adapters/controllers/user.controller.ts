@@ -8,7 +8,6 @@ import { UserInteractor } from '../../use-cases/interactor/user.interactor';
 import { ParsedQs } from 'qs';
 import bcrypt from 'bcrypt';
 import {ResponseHandler} from "../../utils/response-handler";
-import {PaginationDto} from "../../utils/dto/pagination.dto";
 
 export class UserController implements IUserController {
 	private userInteractor: UserInteractor;

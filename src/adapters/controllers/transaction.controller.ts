@@ -9,6 +9,7 @@ import {
 import { TransactionInteractor } from '../../use-cases/interactor/transaction.interactor';
 import { Transaction } from '@prisma/client';
 import { RequestWithUserProps } from '../../use-cases/interfaces/auth.interface';
+import {ResponseHandler} from "../../utils/response-handler";
 
 export class TransactionController implements ITransactionController {
 	private interactor: TransactionInteractor;
@@ -29,7 +30,7 @@ export class TransactionController implements ITransactionController {
 				...req.body,
 			};
 			const result = await this.interactor.update(updateData);
-			return sendResponse(res, 200, 'Update Transaction Success', result);
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}
@@ -47,7 +48,7 @@ export class TransactionController implements ITransactionController {
 		try {
 			const cashierId = req.user.id;
 			const result = await this.interactor.create({ ...req.body, cashier_id: cashierId });
-			return sendResponse(res, 200, 'Create Transaction Success', result);
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (err) {
 			next(err);
 		}
@@ -65,7 +66,7 @@ export class TransactionController implements ITransactionController {
 				payment_method_id,
 			};
 			const result = await this.interactor.get(filters);
-			return sendResponse(res, 200, 'Get Transaction Success', result);
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}

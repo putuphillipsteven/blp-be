@@ -161,11 +161,7 @@ export class UserRepository implements UserUseCases {
 
 			const userId = res.id;
 
-			const user = await this.prisma.user.findFirst({where: {
-				id: userId
-				},
-				select: this.selectFilter,
-			});
+			const user = await this.getUserDetails({id: userId});
 
 			return user;
 		} catch (error) {
