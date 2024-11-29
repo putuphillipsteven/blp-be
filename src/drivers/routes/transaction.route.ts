@@ -1,10 +1,10 @@
 import express from 'express';
-import { TransactionRepository } from '../../adapters/repositories/transaction';
-import { TransactionInteractor } from '../../use-cases/interactor/transaction';
-import { TransactionController } from '../../adapters/controllers/transaction';
+import { TransactionRepository } from '../../adapters/repositories/transaction.repository';
+import { TransactionInteractor } from '../../use-cases/interactor/transaction.interactor';
+import { TransactionController } from '../../adapters/controllers/transaction.controller';
 import { body } from 'express-validator';
-import { validator } from '../../middleware/validator';
-import { verifyToken } from '../../middleware/auth';
+import { validatorMiddleware } from '../../middleware/validator.middleware';
+import { verifyToken } from '../../middleware/auth.middleware';
 
 // Define all neccesary class
 const repository = new TransactionRepository();
@@ -24,7 +24,7 @@ router.patch('/v1/transactions', verifyToken, controller.update.bind(controller)
 router.post(
 	'/v1/transactions',
 	verifyToken,
-	validator(createTransactionValidations),
+	validatorMiddleware(createTransactionValidations),
 	controller.create.bind(controller),
 );
 

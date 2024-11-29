@@ -6,16 +6,62 @@ import {
 	UpdateUserProps,
 	UserDetailsReturnProps, UserDTO,
 	UserUseCases,
-} from '../../use-cases/interfaces/user';
+} from '../../use-cases/interfaces/user.interface';
 
 export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;
 
 	private whereFilter: any;
 
+	private selectFilter  = {
+		id: true,
+		first_name: true,
+		last_name: true,
+		full_name: true,
+		phone_number: true,
+		second_phone_number: true,
+		role_id: true,
+		is_verified: true,
+		role: {
+			select: {
+				id: true,
+				name: true,
+			},
+		},
+		avatar_url: true,
+		email: true,
+		gender: {
+			select: {
+				id: true,
+				gender_name: true,
+			},
+		},
+	};
+
 	constructor() {
 		this.prisma = new PrismaClient();
 		this.whereFilter = {};
+	}
+
+	setWhereFilterForRoleNameAndPhoneNumber(role_id: number, name: String, phone_number: String) {
+		this.whereFilter.AND = [{
+			role_id: {
+				equals: role_id
+			}
+		},
+			{
+			full_name: {
+				contains: name,
+			}
+		},
+			{
+				phone_number: {
+					contains: phone_number,
+				},
+			},
+			{
+
+			}]
 	}
 
 	setWhereFilterForNameAndPhoneNumber(name: String, phone_number: String) {
@@ -51,32 +97,9 @@ export class UserRepository implements UserUseCases {
 
 			const res = await this.prisma.user.findFirst({
 				where: {
-					id,
+					id
 				},
-				select: {
-					id: true,
-					first_name: true,
-					last_name: true,
-					full_name: true,
-					phone_number: true,
-					second_phone_number: true,
-					role_id: true,
-					is_verified: true,
-					role: {
-						select: {
-							id: true,
-							name: true,
-						},
-					},
-					avatar_url: true,
-					email: true,
-					gender: {
-						select: {
-							id: true,
-							gender_name: true,
-						},
-					},
-				},
+				select: this.selectFilter,
 			});
 
 			if (res) {
@@ -112,17 +135,10 @@ export class UserRepository implements UserUseCases {
 
 			const take = Number(page_size);
 
-			const roles = {} as any;
 
-			if (role_id) {
-				roles.role_id = {
-					equals: role_id,
-				};
-			}
-
-			this.whereFilter = { ...roles };
-
-			if (name && phone_number) {
+			if(role_id && name && phone_number) {
+				this.setWhereFilterForRoleNameAndPhoneNumber(role_id, name, phone_number);
+			} else if (name && phone_number) {
 				this.setWhereFilterForNameAndPhoneNumber(name, phone_number);
 			} else if (name) {
 				this.setWhereFilterForName(name);
@@ -138,31 +154,10 @@ export class UserRepository implements UserUseCases {
 				orderBy: {
 					first_name: 'asc',
 				},
-				select: {
-					id: true,
-					first_name: true,
-					last_name: true,
-					full_name: true,
-					phone_number: true,
-					second_phone_number: true,
-					role_id: true,
-					is_verified: true,
-					role: {
-						select: {
-							id: true,
-							name: true,
-						},
-					},
-					avatar_url: true,
-					email: true,
-					gender: {
-						select: {
-							id: true,
-							gender_name: true,
-						},
-					},
-				},
+				select: this.selectFilter
 			});
+
+			console.log("select filter: ", this.selectFilter);
 
 			const totalDatum = await  this.prisma.user.count({where: this.whereFilter});
 

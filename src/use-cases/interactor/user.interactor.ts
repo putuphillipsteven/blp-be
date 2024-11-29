@@ -1,4 +1,4 @@
-import { UserRepository } from '../../adapters/repositories/user';
+import { UserRepository } from '../../adapters/repositories/user.repository';
 import { User } from '@prisma/client';
 import {
 	CreateUserProps,
@@ -6,7 +6,7 @@ import {
 	GetUserProps, ReturnUserDTO,
 	UpdateUserProps,
 	UserUseCases,
-} from '../interfaces/user';
+} from '../interfaces/user.interface';
 
 export class UserInteractor implements UserUseCases {
 	private repository: UserRepository;

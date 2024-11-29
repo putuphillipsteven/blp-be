@@ -1,12 +1,10 @@
-import { errorHandler } from './middleware/error-handler';
+import {ErrorHandler, errorHandler} from './utils/error-handler';
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import router from './router';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
-import swaggerOutput from './swagger_output.json';
 
 dotenv.config({
 	path: path.resolve(__dirname, '../.env'),
@@ -38,9 +36,7 @@ app.use('/api', router);
 
 app.use('/api/uploads', express.static(path.join(__dirname, './public/images')));
 
-app.use(errorHandler);
-
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+app.use(ErrorHandler.generateResponse);
 
 app.listen(port, () => {
 	console.log(`Server started on port : [${port}]`);

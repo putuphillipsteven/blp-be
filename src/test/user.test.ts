@@ -6,7 +6,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import cors from "cors";
 import router from "../router";
-import { errorHandler } from "../middleware/error-handler";
+import { errorHandler } from "../utils/error-handler";
 import {afterAll, beforeAll, describe, it, expect} from "@jest/globals";
 
 // Load environment variables

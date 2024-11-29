@@ -1,4 +1,4 @@
-import { TransactionRepository } from '../../adapters/repositories/transaction';
+import { TransactionRepository } from '../../adapters/repositories/transaction.repository';
 import { Transaction } from '@prisma/client';
 import {
 	CreateTransactionWithDetailsProps,
@@ -6,7 +6,7 @@ import {
 	GetTransactionReturnProps,
 	TransactionUseCases,
 	UpdateTransactionProps,
-} from '../interfaces/transaction';
+} from '../interfaces/transaction.interface';
 
 export class TransactionInteractor implements TransactionUseCases {
 	private repository: TransactionRepository;

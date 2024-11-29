@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import productRoute from './drivers/routes/product';
-import productCategoriesRoute from './drivers/routes/product-category';
-import transactionRoute from './drivers/routes/transaction';
-import authRoute from './drivers/routes/auth';
-import userRoute from './drivers/routes/user';
-import productImageRoute from './drivers/routes/product-image';
+import productRoute from './drivers/routes/product.route';
+import productCategoriesRoute from './drivers/routes/product-category.route';
+import transactionRoute from './drivers/routes/transaction.route';
+import authRoute from './drivers/routes/auth.route';
+import userRoute from './drivers/routes/user.route';
+import productImageRoute from './drivers/routes/product-image.route';
 
 const router = Router();
 

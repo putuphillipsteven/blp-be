@@ -15,3 +15,14 @@ export const errorHandler: ErrorRequestHandler = (
 		},
 	});
 };
+
+export class ErrorHandler {
+	public static generateResponse( error: any, req: Request, res: Response, next: NextFunction): Response {
+		let JSONResponse: any = {}
+
+		JSONResponse.status = error.status || 500;
+		JSONResponse.message = error.message || 'Something went wrong';
+		JSONResponse.stack = process.env.NODE_ENV === 'production' ? '[]' : error.stack;
+		return res.status(error.status || 500).json(JSONResponse);
+	}
+}

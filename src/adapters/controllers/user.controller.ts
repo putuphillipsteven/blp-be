@@ -3,12 +3,12 @@ import {
 	GetUserDetailsProps,
 	GetUserProps,
 	IUserController,
-} from '../../use-cases/interfaces/user';
-import { UserInteractor } from '../../use-cases/interactor/user';
+} from '../../use-cases/interfaces/user.interface';
+import { UserInteractor } from '../../use-cases/interactor/user.interactor';
 import { ParsedQs } from 'qs';
 import bcrypt from 'bcrypt';
 import {ResponseHandler} from "../../utils/response-handler";
-import {PaginationDTO} from "../../utils/dto/paginationdto";
+import {PaginationDto} from "../../utils/dto/pagination.dto";
 
 export class UserController implements IUserController {
 	private userInteractor: UserInteractor;
@@ -54,7 +54,7 @@ export class UserController implements IUserController {
 
 			const currentPage = data?.current_page;
 
-			const paginationDTO = new PaginationDTO(totalDatum, totalPages, currentPage);
+			const paginationDTO = new PaginationDto(totalDatum, totalPages, currentPage);
 
 			return  ResponseHandler.generateResponse(res, 200, users, paginationDTO);
 	}

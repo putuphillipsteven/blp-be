@@ -1,8 +1,8 @@
 import express from 'express';
-import { ProductImageRepository } from '../../adapters/repositories/product-image';
-import { ProductImageInteractor } from '../../use-cases/interactor/product-image';
-import { ProductImageController } from '../../adapters/controllers/product-image';
-import { uploadProductImageFile } from '../../middleware/multer';
+import { ProductImageRepository } from '../../adapters/repositories/product-image.repository';
+import { ProductImageInteractor } from '../../use-cases/interactor/product-image.interactor';
+import { ProductImageController } from '../../adapters/controllers/product-image.controller';
+import { uploadProductImageFile } from '../../middleware/multer.middleware';
 
 const repository = new ProductImageRepository();
 const interactor = new ProductImageInteractor(repository);

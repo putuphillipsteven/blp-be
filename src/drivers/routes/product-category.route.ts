@@ -1,7 +1,7 @@
 import express from 'express';
-import { ProductCategoryRepository } from '../../adapters/repositories/product-category';
-import { ProductCategoryInteractor } from '../../use-cases/interactor/product-category';
-import { ProductCategoryController } from '../../adapters/controllers/product-category';
+import { ProductCategoryRepository } from '../../adapters/repositories/product-category.repository';
+import { ProductCategoryInteractor } from '../../use-cases/interactor/product-category.interactor';
+import { ProductCategoryController } from '../../adapters/controllers/product-category.controller';
 
 const repository = new ProductCategoryRepository();
 const interactor = new ProductCategoryInteractor(repository);

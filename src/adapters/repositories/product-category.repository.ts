@@ -6,8 +6,8 @@ import {
 	DeleteProductCategoryProps,
 	ProductCategoryUseCases,
 	GetProductDetailsProps,
-} from '../../use-cases/interfaces/product-category';
-import {ProductCategoryDTO} from "../../utils/dto/product-category";
+} from '../../use-cases/interfaces/product-category.interface';
+import {ProductCategoryDTO} from "../../utils/dto/product-category.dto";
 
 export class ProductCategoryRepository implements ProductCategoryUseCases {
 	private prisma: PrismaClient;

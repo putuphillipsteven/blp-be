@@ -7,8 +7,9 @@ import {
 	GetProductFilterProps,
 	IProductController,
 	UpdateProductProps,
-} from '../../use-cases/interfaces/product';
-import { ProductInteractor } from '../../use-cases/interactor/product';
+} from '../../use-cases/interfaces/product.interface';
+import { ProductInteractor } from '../../use-cases/interactor/product.interactor';
+import {ResponseHandler} from "../../utils/response-handler";
 
 export class ProductController implements IProductController {
 	private interactor: ProductInteractor;
@@ -21,8 +22,8 @@ export class ProductController implements IProductController {
 		try {
 			const { id } = req.params;
 			const args = { id: Number(id) };
-			const data = await this.interactor.getDetails(args);
-			return sendResponse(res, 200, 'Get Product Details Success', data);
+			const product = await this.interactor.getDetails(args);
+			return ResponseHandler.generateResponse(res, 200 , product);
 		} catch (error) {
 			next(error);
 		}
@@ -35,7 +36,7 @@ export class ProductController implements IProductController {
 				id: Number(id),
 			};
 			const result = await this.interactor.delete(args);
-			sendResponse(res, 200, 'Get Product Success', result);
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}
@@ -54,7 +55,7 @@ export class ProductController implements IProductController {
 				stock: Number(stock),
 			};
 			const result = await this.interactor.get(filters);
-			sendResponse(res, 200, 'Get Product Success', result);
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}
@@ -70,7 +71,7 @@ export class ProductController implements IProductController {
 			};
 
 			const result = await this.interactor.update(updateData);
-			sendResponse(res, 200, 'Update Product Success', result);
+			ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}
@@ -81,7 +82,7 @@ export class ProductController implements IProductController {
 			const data = await this.interactor.create({
 				...req.body,
 			});
-			return sendResponse(res, 200, 'Create Product Success', data);
+			return ResponseHandler.generateResponse(res, 200, data);
 		} catch (error) {
 			next(error);
 		}

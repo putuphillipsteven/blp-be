@@ -1,11 +1,11 @@
-import { AuthRepository } from '../../adapters/repositories/auth';
+import { AuthRepository } from '../../adapters/repositories/auth.repository';
 import {
 	AuthUseCases,
 	KeepLoginProps,
 	LoginProps,
 	LoginReturnProps,
 	LoginReturnUserProps,
-} from '../interfaces/auth';
+} from '../interfaces/auth.interface';
 
 export class AuthInteractor implements AuthUseCases {
 	private repository: AuthRepository;

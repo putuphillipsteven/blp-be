@@ -5,10 +5,10 @@ import {
 	GetTransactionFilters,
 	ITransactionController,
 	UpdateTransactionProps,
-} from '../../use-cases/interfaces/transaction';
-import { TransactionInteractor } from '../../use-cases/interactor/transaction';
+} from '../../use-cases/interfaces/transaction.interface';
+import { TransactionInteractor } from '../../use-cases/interactor/transaction.interactor';
 import { Transaction } from '@prisma/client';
-import { RequestWithUserProps } from '../../use-cases/interfaces/auth';
+import { RequestWithUserProps } from '../../use-cases/interfaces/auth.interface';
 
 export class TransactionController implements ITransactionController {
 	private interactor: TransactionInteractor;

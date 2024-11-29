@@ -1,16 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
-import { IAuthController, VerifyTokenWithUserProps } from '../../use-cases/interfaces/auth';
-import { AuthInteractor } from '../../use-cases/interactor/auth';
+import { IAuthController, VerifyTokenWithUserProps } from '../../use-cases/interfaces/auth.interface';
+import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
 import { sendResponse } from '../../utils/utilts';
+import {ResponseHandler} from "../../utils/response-handler";
 
 export class AuthController implements IAuthController {
 	private interactor: AuthInteractor;
 	constructor(interactor: AuthInteractor) {
 		this.interactor = interactor;
 	}
+
 	googleLogin(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		throw new Error('Method not implemented.');
 	}
+
 	async keepLogin(
 		req: VerifyTokenWithUserProps,
 		res: Response,
@@ -20,17 +23,18 @@ export class AuthController implements IAuthController {
 			const { id } = req.user;
 			const args = { id };
 			const result = await this.interactor.keepLogin(args);
-			return sendResponse(res, 200, 'Keep Login Success', result);
+			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
 		}
 	}
+
 	async login(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		try {
 			const { email, password } = req.body;
 			const args = { email, password };
 			const data = await this.interactor.login(args);
-			return sendResponse(res, 200, 'Login Success', data);
+			return ResponseHandler.generateResponse(res, 200, data);
 		} catch (error) {
 			next(error);
 		}

@@ -6,7 +6,7 @@ import {
 	GetTransactionReturnProps,
 	TransactionUseCases,
 	UpdateTransactionProps,
-} from '../../use-cases/interfaces/transaction';
+} from '../../use-cases/interfaces/transaction.interface';
 
 export class TransactionRepository implements TransactionUseCases {
 	private prisma: PrismaClient;

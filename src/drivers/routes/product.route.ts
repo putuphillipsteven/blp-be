@@ -1,10 +1,10 @@
 import express from 'express';
-import { ProductController } from '../../adapters/controllers/product';
-import { ProductInteractor } from '../../use-cases/interactor/product';
-import { ProductRepository } from '../../adapters/repositories/product';
+import { ProductController } from '../../adapters/controllers/product.controller';
+import { ProductInteractor } from '../../use-cases/interactor/product.interactor';
+import { ProductRepository } from '../../adapters/repositories/product.repository';
 import { body } from 'express-validator';
-import { validator } from '../../middleware/validator';
-import { checkRoleEmployeeOrManager, verifyToken } from '../../middleware/auth';
+import { validatorMiddleware } from '../../middleware/validator.middleware';
+import { checkRoleEmployeeOrManager, verifyToken } from '../../middleware/auth.middleware';
 
 const repository = new ProductRepository();
 const interactor = new ProductInteractor(repository);
@@ -31,7 +31,7 @@ router.post(
 	'/v1/products',
 	verifyToken,
 	checkRoleEmployeeOrManager,
-	validator(createProductValidations),
+	validatorMiddleware(createProductValidations),
 	controller.create.bind(controller),
 );
 
@@ -39,7 +39,7 @@ router.patch(
 	'/v1/products/:id',
 	verifyToken,
 	checkRoleEmployeeOrManager,
-	validator(updateProductValidations),
+	validatorMiddleware(updateProductValidations),
 	controller.update.bind(controller),
 );
 

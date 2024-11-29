@@ -1,10 +1,10 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { validator } from '../../middleware/validator';
-import { UserRepository } from '../../adapters/repositories/user';
-import { UserInteractor } from '../../use-cases/interactor/user';
-import { UserController } from '../../adapters/controllers/user';
-import { uploadAvatarFile } from '../../middleware/multer';
+import { validatorMiddleware } from '../../middleware/validator.middleware';
+import { UserRepository } from '../../adapters/repositories/user.repository';
+import { UserInteractor } from '../../use-cases/interactor/user.interactor';
+import { UserController } from '../../adapters/controllers/user.controller';
+import { uploadAvatarFile } from '../../middleware/multer.middleware';
 
 const repository = new UserRepository();
 const interactor = new UserInteractor(repository);
@@ -25,7 +25,7 @@ const router = express.Router();
 
 router.get('/v1/users', controller.getUsers.bind(controller));
 router.get('/v1/users/details/:id', controller.getUserDetails.bind(controller));
-router.post('/v1/users', validator(createUserValidations), controller.createUser.bind(controller));
+router.post('/v1/users', validatorMiddleware(createUserValidations), controller.createUser.bind(controller));
 router.patch('/v1/users/:id', uploadAvatarFile, controller.updateUser.bind(controller));
 router.delete('/v1/users/:id', controller.deleteUser.bind(controller));
 

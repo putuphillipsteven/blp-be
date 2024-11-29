@@ -5,8 +5,8 @@ import {
 	DeleteProductCategoryProps,
 	ProductCategoryUseCases,
 	GetProductDetailsProps, GetProductCategoryReturnProps,
-} from '../interfaces/product-category';
-import { ProductCategoryRepository } from '../../adapters/repositories/product-category';
+} from '../interfaces/product-category.interface';
+import { ProductCategoryRepository } from '../../adapters/repositories/product-category.repository';
 
 export class ProductCategoryInteractor implements ProductCategoryUseCases {
 	private repository: ProductCategoryRepository;

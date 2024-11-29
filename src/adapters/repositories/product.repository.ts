@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-import { Product } from '@prisma/client';
+import { PrismaClient, Product } from '@prisma/client';
 import {
 	CreateProductProps,
 	DeleteProductProps,
@@ -8,14 +7,17 @@ import {
 	GetProductReturnProps,
 	ProductUseCases,
 	UpdateProductProps,
-} from '../../use-cases/interfaces/product';
+} from '../../use-cases/interfaces/product.interface';
 
 export class ProductRepository implements ProductUseCases {
 	private prisma: PrismaClient;
+	private whereFilter: any;
 
 	constructor() {
 		this.prisma = new PrismaClient();
+		this.whereFilter = {};
 	}
+
 	async getDetails(args: GetProductDetailsProps): Promise<Product | null> {
 		try {
 			const res = await this.prisma.product.findFirst({
@@ -32,6 +34,7 @@ export class ProductRepository implements ProductUseCases {
 			throw error;
 		}
 	}
+
 	// Delete Product
 	async delete(args: DeleteProductProps): Promise<Product | undefined> {
 		try {
@@ -43,6 +46,7 @@ export class ProductRepository implements ProductUseCases {
 			throw error;
 		}
 	}
+
 
 	// Get Product
 	async get(args: GetProductFilterProps): Promise<GetProductReturnProps | undefined> {
@@ -99,6 +103,8 @@ export class ProductRepository implements ProductUseCases {
 					product_name: 'asc',
 				};
 			}
+
+			console.log(JSON.stringify(newFilter));
 
 			const total = await this.prisma.product.count({ ...totalFilter });
 			const data = await this.prisma.product.findMany({

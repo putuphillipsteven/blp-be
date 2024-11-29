@@ -1,4 +1,4 @@
-export class PaginationDTO {
+export class PaginationDto {
     constructor(
         public totalDatum?: number,
         public totalPages?: number,

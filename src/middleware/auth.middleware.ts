@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { VerifyTokenWithUserProps } from '../use-cases/interfaces/auth';
+import { VerifyTokenWithUserProps } from '../use-cases/interfaces/auth.interface';
 
 export const verifyToken: any = (
 	req: VerifyTokenWithUserProps,

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { AuthUseCases, KeepLoginProps, LoginProps } from '../../use-cases/interfaces/auth';
+import { AuthUseCases, KeepLoginProps, LoginProps } from '../../use-cases/interfaces/auth.interface';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 

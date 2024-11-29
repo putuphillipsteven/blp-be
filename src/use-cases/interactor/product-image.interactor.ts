@@ -2,9 +2,9 @@ import {
 	CreateProductImageProps,
 	DeleteProductImageProps,
 	ProductImageUseCases,
-} from '../interfaces/product-image';
+} from '../interfaces/product-image.interface';
 import { Product_Image } from '@prisma/client';
-import { ProductImageRepository } from '../../adapters/repositories/product-image';
+import { ProductImageRepository } from '../../adapters/repositories/product-image.repository';
 
 export class ProductImageInteractor implements ProductImageUseCases {
 	private repository: ProductImageRepository;

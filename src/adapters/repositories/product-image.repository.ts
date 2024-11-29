@@ -3,7 +3,7 @@ import {
 	CreateProductImageProps,
 	DeleteProductImageProps,
 	ProductImageUseCases,
-} from '../../use-cases/interfaces/product-image';
+} from '../../use-cases/interfaces/product-image.interface';
 import { Product_Image } from '@prisma/client';
 
 export class ProductImageRepository implements ProductImageUseCases {
