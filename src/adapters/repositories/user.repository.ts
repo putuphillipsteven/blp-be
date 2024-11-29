@@ -7,6 +7,7 @@ import {
 	UserDetailsReturnProps, UserDTO,
 	UserUseCases,
 } from '../../use-cases/interfaces/user.interface';
+import {PaginationDto} from "../../utils/dto/pagination.dto";
 
 export class UserRepository implements UserUseCases {
 	private prisma: PrismaClient;
@@ -43,53 +44,20 @@ export class UserRepository implements UserUseCases {
 		this.whereFilter = {};
 	}
 
-	setWhereFilterForRoleNameAndPhoneNumber(role_id: number, name: String, phone_number: String) {
-		this.whereFilter.AND = [{
-			role_id: {
-				equals: role_id
-			}
-		},
-			{
-			full_name: {
-				contains: name,
-			}
-		},
-			{
-				phone_number: {
-					contains: phone_number,
-				},
-			},
-			{
-
-			}]
-	}
-
-	setWhereFilterForNameAndPhoneNumber(name: String, phone_number: String) {
+	setWhereFilter(role_id: number, name: String, phone_number: String) {
 		this.whereFilter.AND = [
-			{
-				full_name: {
-					contains: name,
-				}
-			},
-			{
-				phone_number: {
+			role_id ? {role_id:{
+				equals: role_id
+			}} : {},
+			name ? {full_name: {
+				contains: name,
+			}} : {},
+			phone_number ? {phone_number: {
 					contains: phone_number,
-				},
-			},
-		];
+				}} : {},
+		]
 	}
 
-	setWhereFilterForName(name: String) {
-		this.whereFilter.full_name = {
-			contains: name,
-		}
-	}
-
-	setWhereFilterForPhoneNumber(phone_number: String) {
-		this.whereFilter.phone_number = {
-			contains: phone_number,
-		};
-	}
 
 	async getUserDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null> {
 		try {
@@ -135,17 +103,7 @@ export class UserRepository implements UserUseCases {
 
 			const take = Number(page_size);
 
-
-			if(role_id && name && phone_number) {
-				this.setWhereFilterForRoleNameAndPhoneNumber(role_id, name, phone_number);
-			} else if (name && phone_number) {
-				this.setWhereFilterForNameAndPhoneNumber(name, phone_number);
-			} else if (name) {
-				this.setWhereFilterForName(name);
-			} else if (phone_number) {
-				this.setWhereFilterForPhoneNumber(phone_number);
-			}
-
+			this.setWhereFilter(role_id, name, phone_number);
 
 			const users: UserDTO[] = await this.prisma.user.findMany({
 				skip,
@@ -157,18 +115,16 @@ export class UserRepository implements UserUseCases {
 				select: this.selectFilter
 			});
 
-			console.log("select filter: ", this.selectFilter);
-
 			const totalDatum = await  this.prisma.user.count({where: this.whereFilter});
 
 			const totalPages = Math.ceil(totalDatum / page_size);
 
 			const currentPage = page;
 
+			const paginationDTO = new PaginationDto(totalDatum, totalPages, currentPage);
+
 			return {
-				total_datum: totalDatum,
-				total_pages: totalPages,
-				current_page: currentPage,
+				pagination: paginationDTO,
 				data: users
 			};
 
@@ -199,9 +155,19 @@ export class UserRepository implements UserUseCases {
 
 			const fullName = first_name + ' ' + (last_name ? last_name : '');
 
-			const res = await this.prisma.user.create({ data: { ...args, full_name: fullName.trim() } });
+			const role_id = args.role_id ? args.role_id : 3;
 
-			return res;
+			const res = await this.prisma.user.create({ data: { ...args, full_name: fullName.trim(), role_id} });
+
+			const userId = res.id;
+
+			const user = await this.prisma.user.findFirst({where: {
+				id: userId
+				},
+				select: this.selectFilter,
+			});
+
+			return user;
 		} catch (error) {
 			throw error;
 		}
@@ -229,8 +195,10 @@ export class UserRepository implements UserUseCases {
 			if (second_phone_number) argsToUpdate.second_phone_number = second_phone_number;
 			if (gender_id) argsToUpdate.gender_id = Number(gender_id);
 
-			const res = await this.prisma.user.update({ where: { id }, data: argsToUpdate });
-			return res;
+			await this.prisma.user.update({ where: { id }, data: argsToUpdate });
+
+			const user = await this.getUserDetails({id});
+			return user;
 		} catch (error) {
 			throw error;
 		}
@@ -239,7 +207,8 @@ export class UserRepository implements UserUseCases {
 	async deleteUser(args: any): Promise<any | undefined> {
 		try {
 			const { id } = args;
-			const res = await this.prisma.user.delete({
+
+			await this.prisma.user.delete({
 				where: {
 					id,
 				},

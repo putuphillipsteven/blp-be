@@ -48,15 +48,9 @@ export class UserController implements IUserController {
 
 			const users = data?.data;
 
-			const totalPages = data?.total_pages;
+			const pagination = data?.pagination;
 
-			const totalDatum = data?.total_datum;
-
-			const currentPage = data?.current_page;
-
-			const paginationDTO = new PaginationDto(totalDatum, totalPages, currentPage);
-
-			return  ResponseHandler.generateResponse(res, 200, users, paginationDTO);
+			return  ResponseHandler.generateResponse(res, 200, users, pagination);
 	}
 		catch (error) {
 			next(error);

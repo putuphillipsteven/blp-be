@@ -6,7 +6,7 @@ export class ResponseHandler {
 
     public static generateResponse(res: Response, statusCode: number, data: any | null ): Response;
 
-    public static generateResponse(res: Response, statusCode: number, data: any | null, pagination: PaginationDto ): Response;
+    public static generateResponse(res: Response, statusCode: number, data: any | null, pagination?: PaginationDto ): Response;
 
     public static generateResponse(res: Response, statusCode: number, data?: any | null, pagination?: PaginationDto ) {
         let JSONResponse: any = {}

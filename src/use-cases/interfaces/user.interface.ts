@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { User } from '@prisma/client';
+import {PaginationDto} from "../../utils/dto/pagination.dto";
 
 export type UserDTO = Omit<
 	User,
@@ -7,9 +8,7 @@ export type UserDTO = Omit<
 >;
 
 export interface ReturnUserDTO  {
-	total_datum: number,
-	current_page: number,
-	total_pages: number,
+	pagination?: PaginationDto;
 	data?: UserDTO[] | undefined;
 }
 
