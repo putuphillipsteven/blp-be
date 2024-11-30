@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { sendResponse } from '../../utils/utilts';
 import { ParsedQs } from 'qs';
 import {
 	CreateProductRequest,

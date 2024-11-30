@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { IAuthController, VerifyTokenWithUserProps } from '../../use-cases/interfaces/auth.interface';
 import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
-import { sendResponse } from '../../utils/utilts';
 import {ResponseHandler} from "../../utils/response-handler";
 
 export class AuthController implements IAuthController {

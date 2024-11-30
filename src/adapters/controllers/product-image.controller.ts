@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { sendResponse } from '../../utils/utilts';
 import { IProductImageController } from '../../use-cases/interfaces/product-image.interface';
 import { ProductImageInteractor } from '../../use-cases/interactor/product-image.interactor';
 import {ResponseHandler} from "../../utils/response-handler";

@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { ParsedQs } from 'qs';
-import { sendResponse } from '../../utils/utilts';
 import {
 	GetTransactionFilters,
 	ITransactionController,
