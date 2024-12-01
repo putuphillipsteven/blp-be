@@ -58,6 +58,21 @@ export class UserRepository implements UserUseCases {
 		]
 	}
 
+	async getUserByEmail(email: string):Promise<UserDetailsReturnProps | null> {
+		try {
+			const user = await this.prisma.user.findUnique({
+				where: {
+					email,
+				},
+				select: this.selectFilter
+			})
+
+			return user;
+		} catch (error) {
+			throw error;
+		}
+	}
+
 
 	async getUserDetails(args: GetUserDetailsProps): Promise<UserDetailsReturnProps | null> {
 		try {

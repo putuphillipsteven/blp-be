@@ -2,11 +2,14 @@ import { PrismaClient } from '@prisma/client';
 import { AuthUseCases, KeepLoginProps, LoginProps } from '../../use-cases/interfaces/auth.interface';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import {UserRepository} from "./user.repository";
 
 export class AuthRepository implements AuthUseCases {
 	private prisma: PrismaClient;
+	private userRepository: UserRepository;
 	constructor() {
 		this.prisma = new PrismaClient();
+		this.userRepository = new UserRepository()
 	}
 
 	async googleLogin(): Promise<any | undefined> {
@@ -63,7 +66,9 @@ export class AuthRepository implements AuthUseCases {
 				expiresIn: '30d',
 			});
 
-			return { user: isUserExist, token, refreshToken };
+			const userWithoutPassword = await this.userRepository.getUserByEmail(email);
+
+			return { user: userWithoutPassword, token, refreshToken };
 		} catch (error) {
 			throw error;
 		}
