@@ -18,16 +18,16 @@ export class AuthRepository implements AuthUseCases {
 			throw error;
 		}
 	}
+
 	async keepLogin(args: KeepLoginProps): Promise<any | undefined> {
 		try {
 			const { id } = args;
-			const res = await this.prisma.user.findFirst({
-				where: {
-					id,
-				},
-			});
 
-			return res;
+			const res = await this.userRepository.getUserDetails({id});
+
+			return {
+				user: res
+			};
 		} catch (error) {
 			throw error;
 		}
