@@ -48,10 +48,16 @@ export class AuthRepository implements AuthUseCases {
 
 			if (!isPasswordValid) throw new Error('Wrong password');
 
+			const accessTokenExpiredInMS = 60000;
+
+			const refreshTokenExpiredInMS = 180000;
+
 			const payload = {
 				id: isUserExist.id,
 				email: isUserExist.email,
 				role_id: isUserExist.role_id,
+				accessTokenExpiredInMS,
+				accessTokenExpiredAt: new Date(Date.now() + accessTokenExpiredInMS)
 			};
 
 			const jwtSecretKey = process.env.JWT_SECRET_KEY;
@@ -61,11 +67,11 @@ export class AuthRepository implements AuthUseCases {
 			}
 
 			const token = jwt.sign(payload, jwtSecretKey, {
-				expiresIn: '1m',
+				expiresIn: accessTokenExpiredInMS,
 			});
 
 			const refreshToken = jwt.sign(payload, jwtSecretKey, {
-				expiresIn: '3m',
+				expiresIn: refreshTokenExpiredInMS,
 			});
 
 			const userWithoutPassword = await this.userRepository.getUserByEmail(email);

@@ -19,18 +19,22 @@ export const verifyToken: any = (
 
 		const verifiedUser = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
 
-		console.log("verified user: ", verifiedUser);
-
 		req.user = verifiedUser;
+
+		const accessTokenExpiredAt = req.user.accessTokenExpiredAt;
+
+		const getTimeAccessTokenExpiredAt = new Date(accessTokenExpiredAt).getTime();
+
+		const getTimeNow = new Date(Date.now()).getTime();
+
+		if(getTimeAccessTokenExpiredAt < getTimeNow) {
+			return res.status(401).send({ message: 'Expired Token' });
+		}
 
 		next();
 	} catch (error: any) {
 		console.error("Error verifying token: ", error.expiredAt);
-		if(error.expiredAt < Date.now()) {
-			return res.status(401).send({ message: 'Expired Token' });
-		} else {
 			return res.status(500).send({ message: 'Invalid Token' });
-		}
 	}
 };
 
