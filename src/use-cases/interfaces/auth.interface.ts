@@ -5,6 +5,10 @@ export interface VerifyTokenWithUserProps extends Request {
 	user?: any;
 }
 
+export interface RefreshTokenWithUserProps extends Request {
+	user?: any;
+}
+
 export interface RequestWithUserProps extends Request {
 	user?: any;
 }
@@ -25,10 +29,16 @@ export interface KeepLoginProps {
 	id: number;
 }
 
+export interface RefreshTokenProps {
+	email: string;
+	accessToken: string;
+}
+
 export interface AuthUseCases {
 	login(args: LoginProps): Promise<LoginReturnProps | undefined>;
 	keepLogin(args: KeepLoginProps): Promise<any | undefined>;
 	googleLogin(): Promise<any | undefined>;
+	refreshToken(args: RefreshTokenProps): Promise<any | undefined>;
 }
 
 export interface IAuthController {
@@ -39,4 +49,5 @@ export interface IAuthController {
 		next: NextFunction,
 	): Promise<any | undefined>;
 	googleLogin(req: Request, res: Response, next: NextFunction): Promise<any | undefined>;
+	refreshToken(req: RefreshTokenWithUserProps, res: Response, next: NextFunction): Promise<any | undefined>;
 }

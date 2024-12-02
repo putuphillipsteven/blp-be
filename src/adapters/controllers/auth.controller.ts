@@ -1,13 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
-import { IAuthController, VerifyTokenWithUserProps } from '../../use-cases/interfaces/auth.interface';
-import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
+import { IAuthController, RefreshTokenWithUserProps,
+	VerifyTokenWithUserProps
+} from '../../use-cases/interfaces/auth.interface';
+import {AuthInteractor} from '../../use-cases/interactor/auth.interactor';
 import {ResponseHandler} from "../../utils/response-handler";
 
 export class AuthController implements IAuthController {
 	private interactor: AuthInteractor;
+
 	constructor(interactor: AuthInteractor) {
 		this.interactor = interactor;
 	}
+
+	refreshToken(req: RefreshTokenWithUserProps, res: Response<any, Record<string, any>>, next: NextFunction): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
 
 	googleLogin(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
 		throw new Error('Method not implemented.');

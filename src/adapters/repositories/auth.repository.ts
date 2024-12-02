@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { AuthUseCases, KeepLoginProps, LoginProps } from '../../use-cases/interfaces/auth.interface';
+import {AuthUseCases, KeepLoginProps, LoginProps, RefreshTokenProps} from '../../use-cases/interfaces/auth.interface';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {UserRepository} from "./user.repository";
@@ -7,10 +7,12 @@ import {UserRepository} from "./user.repository";
 export class AuthRepository implements AuthUseCases {
 	private prisma: PrismaClient;
 	private userRepository: UserRepository;
+
 	constructor() {
 		this.prisma = new PrismaClient();
 		this.userRepository = new UserRepository()
 	}
+
 
 	async googleLogin(): Promise<any | undefined> {
 		try {
@@ -59,11 +61,11 @@ export class AuthRepository implements AuthUseCases {
 			}
 
 			const token = jwt.sign(payload, jwtSecretKey, {
-				expiresIn: '1h',
+				expiresIn: '1m',
 			});
 
 			const refreshToken = jwt.sign(payload, jwtSecretKey, {
-				expiresIn: '30d',
+				expiresIn: '3m',
 			});
 
 			const userWithoutPassword = await this.userRepository.getUserByEmail(email);
@@ -72,5 +74,9 @@ export class AuthRepository implements AuthUseCases {
 		} catch (error) {
 			throw error;
 		}
+	}
+
+	async refreshToken(args: RefreshTokenProps): Promise<any> {
+		throw new Error('Method not implemented.');
 	}
 }

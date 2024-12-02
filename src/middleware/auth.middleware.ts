@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { VerifyTokenWithUserProps } from '../use-cases/interfaces/auth.interface';
+import jwt, {JwtPayload} from 'jsonwebtoken';
+import {RefreshTokenProps, VerifyTokenWithUserProps} from '../use-cases/interfaces/auth.interface';
+
 
 export const verifyToken: any = (
 	req: VerifyTokenWithUserProps,
@@ -18,20 +19,39 @@ export const verifyToken: any = (
 
 		const verifiedUser = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
 
+		console.log("verified user: ", verifiedUser);
+
 		req.user = verifiedUser;
 
 		next();
-	} catch (error) {
-		return res.status(500).send({ message: 'Invalid Token' });
+	} catch (error: any) {
+		console.error("Error verifying token: ", error.expiredAt);
+		if(error.expiredAt < Date.now()) {
+			return res.status(401).send({ message: 'Expired Token' });
+		} else {
+			return res.status(500).send({ message: 'Invalid Token' });
+		}
 	}
 };
 
-export const refreshToken = (req: VerifyTokenWithUserProps, res: Response, next: NextFunction) => {
+interface CustomJWTPayload extends JwtPayload {
+	id: number,
+	email: string,
+	role_id: number,
+}
+
+export const verifyRefreshToken: boolean | any = (args: RefreshTokenProps) => {
 	try {
+		const {email, accessToken} = args;
+		const verifyUser: string | CustomJWTPayload | any= jwt.verify(accessToken ,  process.env.JWT_SECRET_KEY || '')
+
+		if(verifyUser) {
+			return verifyUser.email === email;
+		}
 	} catch (error) {
-		return res.status(500).send({ message: 'Invalid Token' });
+		return false;
 	}
-};
+}
 
 export const checkRoleEmployeeOrManager: any = (
 	req: VerifyTokenWithUserProps,
@@ -40,6 +60,8 @@ export const checkRoleEmployeeOrManager: any = (
 ) => {
 	try {
 		const ROLE_ID = req.user.role_id;
+
+		console.log("CHECK ROLE REQ.USER: ", req .user);
 
 		if (ROLE_ID === 1 || ROLE_ID === 2) {
 			next();

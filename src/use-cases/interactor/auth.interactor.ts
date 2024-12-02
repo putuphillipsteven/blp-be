@@ -4,7 +4,7 @@ import {
 	KeepLoginProps,
 	LoginProps,
 	LoginReturnProps,
-	LoginReturnUserProps,
+	RefreshTokenProps,
 } from '../interfaces/auth.interface';
 
 export class AuthInteractor implements AuthUseCases {
@@ -13,6 +13,7 @@ export class AuthInteractor implements AuthUseCases {
 	constructor(repository: AuthRepository) {
 		this.repository = repository;
 	}
+
 
 	async googleLogin(): Promise<any | undefined> {
 		throw new Error('Method not implemented.');
@@ -34,5 +35,9 @@ export class AuthInteractor implements AuthUseCases {
 		} catch (error) {
 			throw error;
 		}
+	}
+
+	async refreshToken(args: RefreshTokenProps): Promise<any> {
+		throw new Error('Method not implemented.');
 	}
 }
