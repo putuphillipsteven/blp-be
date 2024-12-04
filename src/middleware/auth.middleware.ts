@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, {JwtPayload} from 'jsonwebtoken';
-import {RefreshTokenProps, VerifyTokenWithUserProps} from '../use-cases/interfaces/auth.interface';
+import {
+	RefreshTokenProps,
+	RefreshTokenWithUserProps,
+	VerifyTokenWithUserProps
+} from '../use-cases/interfaces/auth.interface';
+import {ResponseHandler} from "../utils/response-handler";
 
 
 export const verifyToken: any = (
@@ -44,14 +49,28 @@ interface CustomJWTPayload extends JwtPayload {
 	role_id: number,
 }
 
-export const verifyRefreshToken: boolean | any = (args: RefreshTokenProps) => {
+export const verifyRefreshToken: boolean | any = (req: RefreshTokenWithUserProps, res: Response, next: NextFunction) => {
 	try {
-		const {email, accessToken} = args;
-		const verifyUser: string | CustomJWTPayload | any= jwt.verify(accessToken ,  process.env.JWT_SECRET_KEY || '')
+		const {email, refreshToken} = req.body;
+
+		// const accessTokenExpiredAt = req.user.accessTokenExpiredAt;
+		//
+		// const getTimeAccessTokenExpiredAt = new Date(accessTokenExpiredAt).getTime();
+		//
+		// const getTimeNow = new Date(Date.now()).getTime();
+		//
+		// if(getTimeAccessTokenExpiredAt < getTimeNow) {
+		// 	return res.status(401).send({ message: 'Expired Token' });
+		// }
+
+		const verifyUser: string | CustomJWTPayload | any= jwt.verify(refreshToken ,  process.env.JWT_SECRET_KEY || '')
+
+		console.log("Verify User: ", verifyUser)
 
 		if(verifyUser) {
-			return verifyUser.email === email;
+			return res.status(200).send({ user: verifyUser });
 		}
+		return ResponseHandler.generateResponse(res, 200);
 	} catch (error) {
 		return false;
 	}

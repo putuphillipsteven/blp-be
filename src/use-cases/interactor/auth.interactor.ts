@@ -38,6 +38,10 @@ export class AuthInteractor implements AuthUseCases {
 	}
 
 	async refreshToken(args: RefreshTokenProps): Promise<any> {
-		throw new Error('Method not implemented.');
+			try {
+				await this.repository.refreshToken(args);
+			} catch (error) {
+				throw error;
+			}
 	}
 }

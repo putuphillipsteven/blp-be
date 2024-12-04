@@ -34,6 +34,7 @@ export class AuthRepository implements AuthUseCases {
 			throw error;
 		}
 	}
+
 	async login(args: LoginProps): Promise<any | undefined> {
 		try {
 			const { email, password } = args;
@@ -48,9 +49,9 @@ export class AuthRepository implements AuthUseCases {
 
 			if (!isPasswordValid) throw new Error('Wrong password');
 
-			const accessTokenExpiredInMS = 60000;
+			const accessTokenExpiredInMS = 1800000;
 
-			const refreshTokenExpiredInMS = 180000;
+			const refreshTokenExpiredInMS = accessTokenExpiredInMS * 10;
 
 			const payload = {
 				id: isUserExist.id,
@@ -76,7 +77,9 @@ export class AuthRepository implements AuthUseCases {
 
 			const userWithoutPassword = await this.userRepository.getUserByEmail(email);
 
-			return { user: userWithoutPassword, token, refreshToken };
+			const accessTokenExpiredAt = new Date(Date.now() + accessTokenExpiredInMS).toLocaleString();
+
+			return { user: userWithoutPassword, token, refreshToken, accessTokenExpiredAt };
 		} catch (error) {
 			throw error;
 		}

@@ -12,8 +12,14 @@ export class AuthController implements IAuthController {
 		this.interactor = interactor;
 	}
 
-	refreshToken(req: RefreshTokenWithUserProps, res: Response<any, Record<string, any>>, next: NextFunction): Promise<any> {
-        throw new Error('Method not implemented.');
+	async refreshToken(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
+        try {
+			const {email, refreshToken} = req.body;
+			const test = await this.interactor.refreshToken({email, refreshToken});
+			return ResponseHandler.generateResponse(res, 200);
+		} catch(error) {
+			next(error)
+		}
     }
 
 	googleLogin(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {

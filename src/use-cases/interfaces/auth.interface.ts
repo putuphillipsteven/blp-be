@@ -31,7 +31,7 @@ export interface KeepLoginProps {
 
 export interface RefreshTokenProps {
 	email: string;
-	accessToken: string;
+	refreshToken: string;
 }
 
 export interface AuthUseCases {
