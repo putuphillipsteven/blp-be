@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { IAuthController, RefreshTokenWithUserProps,
-	VerifyTokenWithUserProps
-} from '../../use-cases/interfaces/auth.interface';
-import {AuthInteractor} from '../../use-cases/interactor/auth.interactor';
-import {ResponseHandler} from "../../utils/response-handler";
+import { IAuthController, VerifyTokenWithUserProps } from '../../use-cases/interfaces/auth.interface';
+import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
+import { ResponseHandler } from "../../utils/response-handler";
 
 export class AuthController implements IAuthController {
 	private interactor: AuthInteractor;
@@ -15,8 +13,12 @@ export class AuthController implements IAuthController {
 	async refreshToken(req: Request, res: Response, next: NextFunction): Promise<any | undefined> {
         try {
 			const {email, refreshToken} = req.body;
+
 			const test = await this.interactor.refreshToken({email, refreshToken});
-			return ResponseHandler.generateResponse(res, 200);
+
+			console.log("Test: ", test);
+
+			return ResponseHandler.generateResponse(res, 200, test);
 		} catch(error) {
 			next(error)
 		}

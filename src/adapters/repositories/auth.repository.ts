@@ -3,6 +3,8 @@ import {AuthUseCases, KeepLoginProps, LoginProps, RefreshTokenProps} from '../..
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {UserRepository} from "./user.repository";
+import {ResponseHandler} from "../../utils/response-handler";
+import {CustomJWTPayload} from "../../middleware/auth.middleware";
 
 export class AuthRepository implements AuthUseCases {
 	private prisma: PrismaClient;
@@ -61,6 +63,13 @@ export class AuthRepository implements AuthUseCases {
 				accessTokenExpiredAt: new Date(Date.now() + accessTokenExpiredInMS)
 			};
 
+			const refreshTokenPayload = {
+				email: isUserExist.email,
+				role_id: isUserExist.role_id,
+				refreshTokenExpiredInMS,
+				refreshTokenExpiredAt: new Date(Date.now() + refreshTokenExpiredInMS)
+			}
+
 			const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
 			if (!jwtSecretKey) {
@@ -71,7 +80,7 @@ export class AuthRepository implements AuthUseCases {
 				expiresIn: accessTokenExpiredInMS,
 			});
 
-			const refreshToken = jwt.sign(payload, jwtSecretKey, {
+			const refreshToken = jwt.sign(refreshTokenPayload, jwtSecretKey, {
 				expiresIn: refreshTokenExpiredInMS,
 			});
 
@@ -86,6 +95,32 @@ export class AuthRepository implements AuthUseCases {
 	}
 
 	async refreshToken(args: RefreshTokenProps): Promise<any> {
-		throw new Error('Method not implemented.');
+		try {
+			const {email, refreshToken} = args;
+
+			// const accessTokenExpiredAt = req.user.accessTokenExpiredAt;
+			//
+			// const getTimeAccessTokenExpiredAt = new Date(accessTokenExpiredAt).getTime();
+			//
+			// const getTimeNow = new Date(Date.now()).getTime();
+			//
+			// if(getTimeAccessTokenExpiredAt < getTimeNow) {
+			// 	return res.status(401).send({ message: 'Expired Token' });
+			// }
+
+			const verifyUser: string | CustomJWTPayload | any= jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkZWZhdWx0ZW1wbG95ZWVAZ21haWwuY29tIiwicm9sZV9pZCI6MiwiYWNjZXNzVG9rZW5FeHBpcmVkSW5NUyI6MTgwMDAwMCwiYWNjZXNzVG9rZW5FeHBpcmVkQXQiOiIyMDI0LTEyLTA1VDE2OjU3OjAzLjQyMVoiLCJpYXQiOjE3MzM0MTYwMjMsImV4cCI6MTczNTIxNjAyM30.VU2en3Of_wMr516DEJPUmHnx4G7cOfQOk-4gMoo-ofY" ,  process.env.JWT_SECRET_KEY || '');
+
+			const verifyRefreshToken: string | CustomJWTPayload | any = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY || '');
+
+			console.log("Verify User: ", verifyUser);
+
+			console.log("Verify Refresh Token: ", verifyRefreshToken);
+
+			if(verifyUser) {
+				return { user: verifyUser };
+			}
+		} catch (error) {
+			throw error;
+		}
 	}
 }

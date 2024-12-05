@@ -39,7 +39,8 @@ export class AuthInteractor implements AuthUseCases {
 
 	async refreshToken(args: RefreshTokenProps): Promise<any> {
 			try {
-				await this.repository.refreshToken(args);
+				const res = await this.repository.refreshToken(args);
+				return res;
 			} catch (error) {
 				throw error;
 			}

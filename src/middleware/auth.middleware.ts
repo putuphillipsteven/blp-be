@@ -43,7 +43,7 @@ export const verifyToken: any = (
 	}
 };
 
-interface CustomJWTPayload extends JwtPayload {
+export interface CustomJWTPayload extends JwtPayload {
 	id: number,
 	email: string,
 	role_id: number,
