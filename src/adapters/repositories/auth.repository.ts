@@ -98,26 +98,10 @@ export class AuthRepository implements AuthUseCases {
 		try {
 			const {email, refreshToken} = args;
 
-			// const accessTokenExpiredAt = req.user.accessTokenExpiredAt;
-			//
-			// const getTimeAccessTokenExpiredAt = new Date(accessTokenExpiredAt).getTime();
-			//
-			// const getTimeNow = new Date(Date.now()).getTime();
-			//
-			// if(getTimeAccessTokenExpiredAt < getTimeNow) {
-			// 	return res.status(401).send({ message: 'Expired Token' });
-			// }
-
-			const verifyUser: string | CustomJWTPayload | any= jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkZWZhdWx0ZW1wbG95ZWVAZ21haWwuY29tIiwicm9sZV9pZCI6MiwiYWNjZXNzVG9rZW5FeHBpcmVkSW5NUyI6MTgwMDAwMCwiYWNjZXNzVG9rZW5FeHBpcmVkQXQiOiIyMDI0LTEyLTA1VDE2OjU3OjAzLjQyMVoiLCJpYXQiOjE3MzM0MTYwMjMsImV4cCI6MTczNTIxNjAyM30.VU2en3Of_wMr516DEJPUmHnx4G7cOfQOk-4gMoo-ofY" ,  process.env.JWT_SECRET_KEY || '');
-
 			const verifyRefreshToken: string | CustomJWTPayload | any = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY || '');
 
-			console.log("Verify User: ", verifyUser);
-
-			console.log("Verify Refresh Token: ", verifyRefreshToken);
-
-			if(verifyUser) {
-				return { user: verifyUser };
+			if(verifyRefreshToken) {
+				return { user: verifyRefreshToken };
 			}
 		} catch (error) {
 			throw error;
