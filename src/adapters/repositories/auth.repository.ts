@@ -45,15 +45,20 @@ export class AuthRepository implements AuthUseCases {
 				where: { email },
 			});
 
-			if (!isUserExist) throw new Error('Sorry, email doesnt exist');
+			if (!isUserExist) {
+				throw new Error('Sorry, email doesnt exist');
+			}
 
 			const isPasswordValid = await bcrypt.compare(password, isUserExist.password || '');
 
-			if (!isPasswordValid) throw new Error('Wrong password');
+			if (!isPasswordValid) {
+				throw new Error('Wrong password');
+			}
 
-			const accessTokenExpiredInMS = 1800000;
+			const accessTokenExpiredInMS = Number(process.env.ACCESS_TOKEN_EXPIRED_IN_MS);
 
-			const refreshTokenExpiredInMS = accessTokenExpiredInMS * 10;
+			const refreshTokenExpiredInMS = Number(process.env.REFRESH_TOKEN_EXPIRED_IN_MS);
+
 
 			const payload = {
 				id: isUserExist.id,
@@ -62,6 +67,7 @@ export class AuthRepository implements AuthUseCases {
 				accessTokenExpiredInMS,
 				accessTokenExpiredAt: new Date(Date.now() + accessTokenExpiredInMS)
 			};
+
 
 			const refreshTokenPayload = {
 				email: isUserExist.email,
@@ -76,7 +82,7 @@ export class AuthRepository implements AuthUseCases {
 				throw new Error('JWT_SECRET_KEY is not defined in environment variables');
 			}
 
-			const token = jwt.sign(payload, jwtSecretKey, {
+			const accessToken = jwt.sign(payload, jwtSecretKey, {
 				expiresIn: accessTokenExpiredInMS,
 			});
 
@@ -84,11 +90,15 @@ export class AuthRepository implements AuthUseCases {
 				expiresIn: refreshTokenExpiredInMS,
 			});
 
+			const verifyAccessToken : string | CustomJWTPayload | any = jwt.verify(accessToken,jwtSecretKey);
+			const verifyRefreshToken : string | CustomJWTPayload | any =jwt.verify(refreshToken,jwtSecretKey);
+
+			console.log("verifyAccessToken : ", new Date(verifyAccessToken.exp * 1000).toLocaleString());
+			console.log("verifyRefreshToken : ", new Date(verifyRefreshToken.exp * 1000).toLocaleString());
+
 			const userWithoutPassword = await this.userRepository.getUserByEmail(email);
 
-			const accessTokenExpiredAt = new Date(Date.now() + accessTokenExpiredInMS).toLocaleString();
-
-			return { user: userWithoutPassword, token, refreshToken, accessTokenExpiredAt };
+			return { user: userWithoutPassword, accessToken, refreshToken };
 		} catch (error) {
 			throw error;
 		}

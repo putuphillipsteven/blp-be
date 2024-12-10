@@ -65,8 +65,6 @@ export const verifyRefreshToken: boolean | any = (req: RefreshTokenWithUserProps
 
 		const verifyUser: string | CustomJWTPayload | any= jwt.verify(refreshToken ,  process.env.JWT_SECRET_KEY || '')
 
-		console.log("Verify User: ", verifyUser)
-
 		if(verifyUser) {
 			return res.status(200).send({ user: verifyUser });
 		}
