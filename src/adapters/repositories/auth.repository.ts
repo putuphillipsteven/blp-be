@@ -3,8 +3,12 @@ import {AuthUseCases, KeepLoginProps, LoginProps, RefreshTokenProps} from '../..
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {UserRepository} from "./user.repository";
-import {ResponseHandler} from "../../utils/response-handler";
 import {CustomJWTPayload} from "../../middleware/auth.middleware";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({
+	path: path.resolve(__dirname, '../.env'),
+});
 
 export class AuthRepository implements AuthUseCases {
 	private prisma: PrismaClient;
@@ -14,7 +18,6 @@ export class AuthRepository implements AuthUseCases {
 		this.prisma = new PrismaClient();
 		this.userRepository = new UserRepository()
 	}
-
 
 	async googleLogin(): Promise<any | undefined> {
 		try {
@@ -55,48 +58,32 @@ export class AuthRepository implements AuthUseCases {
 				throw new Error('Wrong password');
 			}
 
-			const accessTokenExpiredInMS = Number(process.env.ACCESS_TOKEN_EXPIRED_IN_MS);
-
-			const refreshTokenExpiredInMS = Number(process.env.REFRESH_TOKEN_EXPIRED_IN_MS);
-
-
 			const payload = {
 				id: isUserExist.id,
 				email: isUserExist.email,
 				role_id: isUserExist.role_id,
-				accessTokenExpiredInMS,
-				accessTokenExpiredAt: new Date(Date.now() + accessTokenExpiredInMS)
 			};
 
-
 			const refreshTokenPayload = {
+				id: isUserExist.id,
 				email: isUserExist.email,
 				role_id: isUserExist.role_id,
-				refreshTokenExpiredInMS,
-				refreshTokenExpiredAt: new Date(Date.now() + refreshTokenExpiredInMS)
 			}
 
-			const jwtSecretKey = process.env.JWT_SECRET_KEY;
-
-			if (!jwtSecretKey) {
+			if (!process.env.JWT_SECRET_KEY) {
 				throw new Error('JWT_SECRET_KEY is not defined in environment variables');
 			}
 
-			const accessToken = jwt.sign(payload, jwtSecretKey, {
-				expiresIn: accessTokenExpiredInMS,
+			const accessToken = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
+				expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRED_IN_MS),
 			});
 
-			const refreshToken = jwt.sign(refreshTokenPayload, jwtSecretKey, {
-				expiresIn: refreshTokenExpiredInMS,
+			const refreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_SECRET_KEY, {
+				expiresIn: Number(process.env.REFRESH_TOKEN_EXPIRED_IN_MS),
 			});
-
-			const verifyAccessToken : string | CustomJWTPayload | any = jwt.verify(accessToken,jwtSecretKey);
-			const verifyRefreshToken : string | CustomJWTPayload | any =jwt.verify(refreshToken,jwtSecretKey);
-
-			console.log("verifyAccessToken : ", new Date(verifyAccessToken.exp * 1000).toLocaleString());
-			console.log("verifyRefreshToken : ", new Date(verifyRefreshToken.exp * 1000).toLocaleString());
 
 			const userWithoutPassword = await this.userRepository.getUserByEmail(email);
+
 
 			return { user: userWithoutPassword, accessToken, refreshToken };
 		} catch (error) {
@@ -110,8 +97,15 @@ export class AuthRepository implements AuthUseCases {
 
 			const verifyRefreshToken: string | CustomJWTPayload | any = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY || '');
 
+			const newAccessToken = jwt.sign({email}, process.env.JWT_SECRET_KEY || "", {
+				expiresIn: Number(process.env.ACCESS_TOKEN_EXPIRED_IN_MS),
+			})
+			const newRefreshAccessToken = jwt.sign({email}, process.env.JWT_SECRET_KEY || "", {
+				expiresIn: Number(process.env.REFRESH_TOKEN_EXPIRED_IN_MS),
+			})
+
 			if(verifyRefreshToken) {
-				return { user: verifyRefreshToken };
+				return { accessToken: newAccessToken, refreshToken: newRefreshAccessToken };
 			}
 		} catch (error) {
 			throw error;

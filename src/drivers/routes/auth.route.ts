@@ -4,7 +4,7 @@ import { AuthInteractor } from '../../use-cases/interactor/auth.interactor';
 import { AuthController } from '../../adapters/controllers/auth.controller';
 import { body } from 'express-validator';
 import { validatorMiddleware } from '../../middleware/validator.middleware';
-import {verifyRefreshToken, verifyToken} from '../../middleware/auth.middleware';
+import {verifyToken} from '../../middleware/auth.middleware';
 
 const loginValidator = [
 	body('email').notEmpty().withMessage('Email cant be empty'),

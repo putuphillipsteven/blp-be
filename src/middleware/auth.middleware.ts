@@ -1,12 +1,14 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction,  Response } from 'express';
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import {
-	RefreshTokenProps,
-	RefreshTokenWithUserProps,
 	VerifyTokenWithUserProps
 } from '../use-cases/interfaces/auth.interface';
-import {ResponseHandler} from "../utils/response-handler";
 
+export interface CustomJWTPayload extends JwtPayload {
+	id: number,
+	email: string,
+	role_id: number,
+}
 
 export const verifyToken: any = (
 	req: VerifyTokenWithUserProps,
@@ -20,15 +22,18 @@ export const verifyToken: any = (
 
 		token = token.split(' ')[1];
 
-		if (token === 'null' || !token) return res.status(500).send({ message: 'Unauthorized Token' });
+		if (token === 'null' || !token) {
+			return res.status(500).send({message: 'Unauthorized Token'});
+		}
 
 		const verifiedUser = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
 
 		req.user = verifiedUser;
 
-		const accessTokenExpiredAt = req.user.accessTokenExpiredAt;
+		console.log("verifiedUser: ", verifiedUser)
+		const accessTokenExpiredAt = req.user.exp;
 
-		const getTimeAccessTokenExpiredAt = new Date(accessTokenExpiredAt).getTime();
+		const getTimeAccessTokenExpiredAt = accessTokenExpiredAt * 1000;
 
 		const getTimeNow = new Date(Date.now()).getTime();
 
@@ -38,41 +43,9 @@ export const verifyToken: any = (
 
 		next();
 	} catch (error: any) {
-		console.error("Error verifying token: ", error.expiredAt);
 			return res.status(500).send({ message: 'Invalid Token' });
 	}
 };
-
-export interface CustomJWTPayload extends JwtPayload {
-	id: number,
-	email: string,
-	role_id: number,
-}
-
-export const verifyRefreshToken: boolean | any = (req: RefreshTokenWithUserProps, res: Response, next: NextFunction) => {
-	try {
-		const {email, refreshToken} = req.body;
-
-		// const accessTokenExpiredAt = req.user.accessTokenExpiredAt;
-		//
-		// const getTimeAccessTokenExpiredAt = new Date(accessTokenExpiredAt).getTime();
-		//
-		// const getTimeNow = new Date(Date.now()).getTime();
-		//
-		// if(getTimeAccessTokenExpiredAt < getTimeNow) {
-		// 	return res.status(401).send({ message: 'Expired Token' });
-		// }
-
-		const verifyUser: string | CustomJWTPayload | any= jwt.verify(refreshToken ,  process.env.JWT_SECRET_KEY || '')
-
-		if(verifyUser) {
-			return res.status(200).send({ user: verifyUser });
-		}
-		return ResponseHandler.generateResponse(res, 200);
-	} catch (error) {
-		return false;
-	}
-}
 
 export const checkRoleEmployeeOrManager: any = (
 	req: VerifyTokenWithUserProps,
@@ -81,8 +54,6 @@ export const checkRoleEmployeeOrManager: any = (
 ) => {
 	try {
 		const ROLE_ID = req.user.role_id;
-
-		console.log("CHECK ROLE REQ.USER: ", req .user);
 
 		if (ROLE_ID === 1 || ROLE_ID === 2) {
 			next();

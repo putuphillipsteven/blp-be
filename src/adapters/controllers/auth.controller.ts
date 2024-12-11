@@ -16,8 +16,6 @@ export class AuthController implements IAuthController {
 
 			const test = await this.interactor.refreshToken({email, refreshToken});
 
-			console.log("Test: ", test);
-
 			return ResponseHandler.generateResponse(res, 200, test);
 		} catch(error) {
 			next(error)

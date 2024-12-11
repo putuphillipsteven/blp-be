@@ -24,7 +24,7 @@ app.use(
 	}),
 );
 
-const port: number = Number(process.env.PORT) || 8000;
+const port: number = Number(process.env.PORT) || 404;
 
 // Middleware to log each request
 app.use((req, res, next) => {
