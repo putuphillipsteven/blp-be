@@ -9,30 +9,30 @@ import router from "../router";
 import { errorHandler } from "../utils/error-handler";
 import {afterAll, beforeAll, describe, it, expect} from "@jest/globals";
 
-// Load environment variables
 dotenv.config({
     path: path.resolve(__dirname, '../.env'), // Ensure the path is correct
 });
 
-// Initialize Prisma client
 const prisma = new PrismaClient();
 
-// Create an Express app
 const app = express();
 
-// Middleware
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.json());
+
 app.use(
     cors({
         origin: process.env.WHITELISTED_DOMAIN || '*', // Use a default for tests
     })
 );
 
-// Define static routes and error handler
 app.use('/api', router);
+
 app.use('/api/uploads', express.static(path.join(__dirname, './public/images')));
+
 app.use(errorHandler);
 
 const port: number = Number(process.env.PORT || "8080");
