@@ -11,11 +11,9 @@ import {
 
 export class ProductRepository implements ProductUseCases {
 	private prisma: PrismaClient;
-	private whereFilter: any;
 
 	constructor() {
 		this.prisma = new PrismaClient();
-		this.whereFilter = {};
 	}
 
 	async getDetails(args: GetProductDetailsProps): Promise<Product | null> {
@@ -104,7 +102,6 @@ export class ProductRepository implements ProductUseCases {
 				};
 			}
 
-			console.log(JSON.stringify(newFilter));
 
 			const total = await this.prisma.product.count({ ...totalFilter });
 			const data = await this.prisma.product.findMany({

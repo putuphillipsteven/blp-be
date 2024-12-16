@@ -30,7 +30,6 @@ export const verifyToken: any = (
 
 		req.user = verifiedUser;
 
-		console.log("verifiedUser: ", verifiedUser)
 		const accessTokenExpiredAt = req.user.exp;
 
 		const getTimeAccessTokenExpiredAt = accessTokenExpiredAt * 1000;

@@ -5,6 +5,7 @@ import { UserRepository } from '../../adapters/repositories/user.repository';
 import { UserInteractor } from '../../use-cases/interactor/user.interactor';
 import { UserController } from '../../adapters/controllers/user.controller';
 import { uploadAvatarFile } from '../../middleware/multer.middleware';
+import {verifyToken} from "../../middleware/auth.middleware";
 
 const repository = new UserRepository();
 const interactor = new UserInteractor(repository);
@@ -23,10 +24,10 @@ const createUserValidations = [
 ];
 const router = express.Router();
 
-router.get('/v1/users', controller.getUsers.bind(controller));
-router.get('/v1/users/details/:id', controller.getUserDetails.bind(controller));
+router.get('/v1/users', verifyToken,controller.getUsers.bind(controller));
+router.get('/v1/users/details/:id', verifyToken, controller.getUserDetails.bind(controller));
 router.post('/v1/users', validatorMiddleware(createUserValidations), controller.createUser.bind(controller));
-router.patch('/v1/users/:id', uploadAvatarFile, controller.updateUser.bind(controller));
-router.delete('/v1/users/:id', controller.deleteUser.bind(controller));
+router.patch('/v1/users/:id', verifyToken, uploadAvatarFile, controller.updateUser.bind(controller));
+router.delete('/v1/users/:id', verifyToken, controller.deleteUser.bind(controller));
 
 export default router;

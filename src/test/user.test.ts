@@ -53,11 +53,20 @@ describe('GET /api/v1/users', () => {
         await prisma.$disconnect();
     });
 
-    it('should return all users', async () => {
+    it('Should return max 10 users', async () => {
         const res = await request(app).get('/api/v1/users');
         expect(res.statusCode).toBe(200);
         expect(res.body.data).toBeDefined();
         expect(res.body.data.length).toBeGreaterThan(0);
         expect(res.body.data.length).toBeLessThanOrEqual(10);
     });
+
+    it("Should not returning password", async () => {
+        const res = await request(app).get('/api/v1/users');
+        expect(res.statusCode).toBe(200);
+        expect(res.body.data).toBeDefined();
+        expect(res.body.data[0].password).toBeUndefined();
+    })
+
+
 });

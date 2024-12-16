@@ -112,7 +112,23 @@ export class TransactionRepository implements TransactionUseCases {
 						},
 					},
 					payment_method: true,
-					transaction_detail: true,
+					transaction_detail: {
+						select: {
+							product: {
+								select : {
+									product_name: true,
+									product_price: true,
+									product_image: true,
+									product_category: {
+										select: {
+											name: true,
+										}
+									}
+								}
+							}
+						}
+					},
+					// transaction_detail: true,
 					status: true,
 				},
 			};
