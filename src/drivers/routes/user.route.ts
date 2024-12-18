@@ -24,7 +24,7 @@ const createUserValidations = [
 ];
 const router = express.Router();
 
-router.get('/v1/users', verifyToken,controller.getUsers.bind(controller));
+router.get('/v1/users', verifyToken, controller.getUsers.bind(controller));
 router.get('/v1/users/details/:id', verifyToken, controller.getUserDetails.bind(controller));
 router.post('/v1/users', validatorMiddleware(createUserValidations), controller.createUser.bind(controller));
 router.patch('/v1/users/:id', verifyToken, uploadAvatarFile, controller.updateUser.bind(controller));

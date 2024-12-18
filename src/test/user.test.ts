@@ -36,8 +36,10 @@ app.use('/api/uploads', express.static(path.join(__dirname, './public/images')))
 app.use(errorHandler);
 
 const port: number = Number(process.env.PORT || "8080");
+
 let server: any; // Placeholder for server instance
 
+let token: String;
 // Tests
 describe('GET /api/v1/users', () => {
     // Start server before tests
@@ -47,26 +49,35 @@ describe('GET /api/v1/users', () => {
         });
     });
 
-    // Stop server and disconnect Prisma after tests
-    afterAll(async () => {
-        server.close();
-        await prisma.$disconnect();
-    });
+    it('Should login first and return accessToken and refreshToken', async  () => {
+        const res = await request(app).post('/api/v1/auth/login').send({
+            email: process.env.TEST_EMAIL || 'defaultcustomer@gmail.com',
+            password: process.env.TEST_PASSWORD || ''
+        })
+        token = res.body.data.accessToken;
+        expect(res.status).toBe(200);
+        expect(res.body.data.accessToken).toBeDefined();
+        expect(res.body.data.accessToken).toBeDefined();
+    })
 
     it('Should return max 10 users', async () => {
-        const res = await request(app).get('/api/v1/users');
-        expect(res.statusCode).toBe(200);
+        const res = await request(app).get('/api/v1/users').set('Authorization', `Bearer ${token}`);
+        expect(res.status).toBe(200);
         expect(res.body.data).toBeDefined();
         expect(res.body.data.length).toBeGreaterThan(0);
         expect(res.body.data.length).toBeLessThanOrEqual(10);
     });
 
     it("Should not returning password", async () => {
-        const res = await request(app).get('/api/v1/users');
-        expect(res.statusCode).toBe(200);
+        const res = await request(app).get('/api/v1/users').set('Authorization', `Bearer ${token}`);
+        expect(res.status).toBe(200);
         expect(res.body.data).toBeDefined();
         expect(res.body.data[0].password).toBeUndefined();
     })
 
-
+    // Stop server and disconnect Prisma after tests
+    afterAll(async () => {
+        server.close();
+        await prisma.$disconnect();
+    });
 });
