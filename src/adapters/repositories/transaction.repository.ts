@@ -52,6 +52,7 @@ export class TransactionRepository implements TransactionUseCases {
 			throw error;
 		}
 	}
+
 	delete(): Promise<Transaction | undefined> {
 		throw new Error('Method not implemented.');
 	}

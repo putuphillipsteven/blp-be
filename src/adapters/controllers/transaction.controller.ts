@@ -15,6 +15,7 @@ export class TransactionController implements ITransactionController {
 	constructor(interactor: TransactionInteractor) {
 		this.interactor = interactor;
 	}
+
 	async update(
 		req: RequestWithUserProps,
 		res: Response,
@@ -22,13 +23,18 @@ export class TransactionController implements ITransactionController {
 	): Promise<any | undefined> {
 		try {
 			const cashierId = req.user.id;
+
+
 			const { id } = req.params;
+
 			const updateData: UpdateTransactionProps = {
 				id: Number(id),
 				cashier_id: cashierId,
 				...req.body,
 			};
+
 			const result = await this.interactor.update(updateData);
+
 			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (error) {
 			next(error);
@@ -46,6 +52,8 @@ export class TransactionController implements ITransactionController {
 	): Promise<any | undefined> {
 		try {
 			const cashierId = req.user.id;
+
+			console.log("cashier id: ", req.user.id);
 			const result = await this.interactor.create({ ...req.body, cashier_id: cashierId });
 			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (err) {

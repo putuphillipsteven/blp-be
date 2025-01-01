@@ -15,6 +15,7 @@ export class ProductCategoryRepository implements ProductCategoryUseCases {
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
+
 	async isChildrenExist(id: number) {
 		const children = await this.prisma.product_Category.findMany({
 			where: {
