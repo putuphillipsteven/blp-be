@@ -4,7 +4,7 @@ import { TransactionInteractor } from '../../use-cases/interactor/transaction.in
 import { TransactionController } from '../../adapters/controllers/transaction.controller';
 import { body } from 'express-validator';
 import { validatorMiddleware } from '../../middleware/validator.middleware';
-import { verifyToken } from '../../middleware/auth.middleware';
+import {AuthMiddleware, verifyToken} from '../../middleware/auth.middleware';
 
 // Define all neccesary class
 const repository = new TransactionRepository();
@@ -19,7 +19,7 @@ const createTransactionValidations = [
 	body('details').notEmpty().withMessage('Please select a product first'),
 ];
 
-router.get('/v1/transactions', verifyToken, controller.get.bind(controller));
+router.get('/v1/transactions', verifyToken, AuthMiddleware.isManager, controller.get.bind(controller));
 router.patch('/v1/transactions', verifyToken,  controller.update.bind(controller));
 router.post(
 	'/v1/transactions',

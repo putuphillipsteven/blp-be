@@ -11,8 +11,6 @@ export interface CustomJWTPayload extends JwtPayload {
 }
 
 export class AuthMiddleware {
-	constructor() {
-	}
 	public static verifyToken(req: VerifyTokenWithUserProps,
 							  res: Response,
 							  next: NextFunction,): any {
@@ -53,7 +51,7 @@ export class AuthMiddleware {
 		try {
 			const ROLE_ID = req.user.role_id;
 
-			if (ROLE_ID === 1 || ROLE_ID === 2) {
+			if (ROLE_ID === 1) {
 				next();
 			} else {
 				return res.status(500).send({message: 'Sorry you dont have access to this'});
@@ -65,7 +63,19 @@ export class AuthMiddleware {
 
 	public static isEmployeeOrManager(req: VerifyTokenWithUserProps,
 									  res: Response,
-									  next: NextFunction)
+									  next: NextFunction): any {
+		try {
+			const ROLE_ID = req.user.role_id;
+
+			if (ROLE_ID === 1 || ROLE_ID === 2) {
+				next();
+			} else {
+				return res.status(500).send({ message: 'Sorry you dont have access to this' });
+			}
+		} catch (error) {
+			return res.status(500).send({ message: 'Sorry you dont have access to this' });
+		}
+	}
 }
 
 export const verifyToken: any = (
