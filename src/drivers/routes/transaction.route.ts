@@ -20,7 +20,7 @@ const createTransactionValidations = [
 ];
 
 router.get('/v1/transactions', verifyToken, controller.get.bind(controller));
-router.patch('/v1/transactions', verifyToken, controller.update.bind(controller));
+router.patch('/v1/transactions', verifyToken,  controller.update.bind(controller));
 router.post(
 	'/v1/transactions',
 	verifyToken,
