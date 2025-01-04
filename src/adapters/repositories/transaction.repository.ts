@@ -7,11 +7,14 @@ import {
 	TransactionUseCases,
 	UpdateTransactionProps,
 } from '../../use-cases/interfaces/transaction.interface';
+import {UserRepository} from "./user.repository";
 
 export class TransactionRepository implements TransactionUseCases {
 	private prisma: PrismaClient;
+	private userRepository: UserRepository;
 	constructor() {
 		this.prisma = new PrismaClient();
+		this.userRepository = new UserRepository();
 	}
 
 	async update(args: UpdateTransactionProps): Promise<Transaction | undefined> {
@@ -179,20 +182,13 @@ export class TransactionRepository implements TransactionUseCases {
 
 	async create(args: CreateTransactionWithDetailsProps): Promise<Transaction | undefined> {
 		try {
-			// Destructuring objects, separate the details, with the transaction data
 			const { details, ...transactionData } = args;
 
 			const userId = transactionData.user_id;
 
-			const customer = await this.prisma.user.findFirst({
-				where: {
-					id: userId,
-				},
-				select: {
-					first_name: true,
-					last_name: true,
-				},
-			});
+
+
+			const customer = await this.userRepository.getUserDetails({id: userId});
 
 			let customerFullName = 'Customer';
 
@@ -212,6 +208,7 @@ export class TransactionRepository implements TransactionUseCases {
 						id: productId,
 					},
 				});
+
 				if (checkProduct) {
 					totalPrice += checkProduct.product_price * qty;
 					totalQty += qty;
@@ -228,6 +225,11 @@ export class TransactionRepository implements TransactionUseCases {
 			if (transactionData.payment_amount < totalPrice) {
 				throw new Error('Under Payment');
 			}
+
+			if(transactionData.cashier_id === transactionData.user_id) {
+				throw new Error("You can create transaction with your own account")
+			}
+
 
 			const createTransaction = await this.prisma.transaction.create({
 				data: {

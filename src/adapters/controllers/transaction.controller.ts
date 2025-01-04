@@ -53,7 +53,6 @@ export class TransactionController implements ITransactionController {
 		try {
 			const cashierId = req.user.id;
 
-			console.log("cashier id: ", req.user.id);
 			const result = await this.interactor.create({ ...req.body, cashier_id: cashierId });
 			return ResponseHandler.generateResponse(res, 200, result);
 		} catch (err) {

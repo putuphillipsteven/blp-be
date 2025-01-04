@@ -4,9 +4,8 @@ import { TransactionInteractor } from '../../use-cases/interactor/transaction.in
 import { TransactionController } from '../../adapters/controllers/transaction.controller';
 import { body } from 'express-validator';
 import { validatorMiddleware } from '../../middleware/validator.middleware';
-import {AuthMiddleware, verifyToken} from '../../middleware/auth.middleware';
+import {AuthMiddleware} from '../../middleware/auth.middleware';
 
-// Define all neccesary class
 const repository = new TransactionRepository();
 const interactor = new TransactionInteractor(repository);
 const controller = new TransactionController(interactor);
@@ -19,11 +18,11 @@ const createTransactionValidations = [
 	body('details').notEmpty().withMessage('Please select a product first'),
 ];
 
-router.get('/v1/transactions', verifyToken, AuthMiddleware.isManager, controller.get.bind(controller));
-router.patch('/v1/transactions', verifyToken,  controller.update.bind(controller));
+router.get('/v1/transactions', AuthMiddleware.verifyToken, AuthMiddleware.isEmployeeOrManager, controller.get.bind(controller));
+router.patch('/v1/transactions', AuthMiddleware.verifyToken,  AuthMiddleware.isManager, controller.update.bind(controller));
 router.post(
 	'/v1/transactions',
-	verifyToken,
+	AuthMiddleware.verifyToken,
 	validatorMiddleware(createTransactionValidations),
 	controller.create.bind(controller),
 );
