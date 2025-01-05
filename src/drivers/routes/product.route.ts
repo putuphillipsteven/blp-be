@@ -4,7 +4,7 @@ import { ProductInteractor } from '../../use-cases/interactor/product.interactor
 import { ProductRepository } from '../../adapters/repositories/product.repository';
 import { body } from 'express-validator';
 import { validatorMiddleware } from '../../middleware/validator.middleware';
-import {AuthMiddleware, checkRoleEmployeeOrManager, verifyToken} from '../../middleware/auth.middleware';
+import {AuthMiddleware} from '../../middleware/auth.middleware';
 
 const repository = new ProductRepository();
 const interactor = new ProductInteractor(repository);
@@ -29,7 +29,7 @@ router.get('/v1/products/details/:id', controller.getDetails.bind(controller));
 
 router.post(
 	'/v1/products',
-	verifyToken,
+	AuthMiddleware.verifyToken,
 	AuthMiddleware.isEmployeeOrManager,
 	validatorMiddleware(createProductValidations),
 	controller.create.bind(controller),
@@ -37,16 +37,16 @@ router.post(
 
 router.patch(
 	'/v1/products/:id',
-	verifyToken,
-	checkRoleEmployeeOrManager,
+	AuthMiddleware.verifyToken,
+	AuthMiddleware.isEmployeeOrManager,
 	validatorMiddleware(updateProductValidations),
 	controller.update.bind(controller),
 );
 
 router.delete(
 	'v1/products/:id',
-	verifyToken,
-	checkRoleEmployeeOrManager,
+	AuthMiddleware.verifyToken,
+	AuthMiddleware.isEmployeeOrManager,
 	controller.delete.bind(controller),
 );
 
