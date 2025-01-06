@@ -68,6 +68,7 @@ export class AuthMiddleware {
 			const ROLE_ID = req.user.role_id;
 
 			if (ROLE_ID === 1 || ROLE_ID === 2) {
+
 				next();
 			} else {
 				return res.status(401).send({ message: 'Sorry you dont have access to this' });
