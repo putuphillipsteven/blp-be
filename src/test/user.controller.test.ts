@@ -1,5 +1,4 @@
 import request from 'supertest';
-import { PrismaClient } from "@prisma/client";
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
@@ -36,13 +35,12 @@ app.use(errorHandler);
 
 const port: number = Number(process.env.PORT || "8080");
 
-let server: any; // Placeholder for server instance
+let server: any;
 
 let token: String;
 
 // Tests
 describe('GET /api/v1/users', () => {
-    // Start server before tests
     beforeAll(() => {
         server = app.listen(port, () => {
             console.log(`Test server running on port: ${port}`);
@@ -57,7 +55,7 @@ describe('GET /api/v1/users', () => {
         token = res.body.data.accessToken;
         expect(res.status).toBe(200);
         expect(res.body.data.accessToken).toBeDefined();
-        expect(res.body.data.accessToken).toBeDefined();
+        expect(res.body.data.refreshToken).toBeDefined();
     })
 
     it('Should return max 10 users', async () => {

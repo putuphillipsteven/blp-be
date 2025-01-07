@@ -24,8 +24,8 @@ const createUserValidations = [
 ];
 const router = express.Router();
 
-router.get('/v1/users', AuthMiddleware.isEmployeeOrManager, controller.getUsers.bind(controller));
-router.get('/v1/users/details/:id', AuthMiddleware.isEmployeeOrManager, controller.getUserDetails.bind(controller));
+router.get('/v1/users', AuthMiddleware.verifyToken, AuthMiddleware.isEmployeeOrManager, controller.getUsers.bind(controller));
+router.get('/v1/users/details/:id', AuthMiddleware.verifyToken, AuthMiddleware.isEmployeeOrManager, controller.getUserDetails.bind(controller));
 router.post('/v1/users', AuthMiddleware.verifyToken, validatorMiddleware(createUserValidations), controller.createUser.bind(controller));
 router.patch('/v1/users/:id', AuthMiddleware.verifyToken, uploadAvatarFile, controller.updateUser.bind(controller));
 router.delete('/v1/users/:id', AuthMiddleware.verifyToken, controller.deleteUser.bind(controller));
