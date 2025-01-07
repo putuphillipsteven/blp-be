@@ -65,8 +65,6 @@ export class AuthMiddleware {
 									  res: Response,
 									  next: NextFunction): any {
 		try {
-			console.log("user: ", req.user);
-
 			const ROLE_ID = req.user.role_id;
 
 

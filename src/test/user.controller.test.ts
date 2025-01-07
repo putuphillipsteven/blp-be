@@ -39,6 +39,8 @@ let server: any;
 
 let token: String;
 
+let roleId: number;
+
 // Tests
 describe('GET /api/v1/users', () => {
     beforeAll(() => {
@@ -53,24 +55,40 @@ describe('GET /api/v1/users', () => {
             password: process.env.TEST_PASSWORD || ''
         })
         token = res.body.data.accessToken;
+
+        roleId = res.body.data.user.role_id;
+
         expect(res.status).toBe(200);
+
         expect(res.body.data.accessToken).toBeDefined();
+
         expect(res.body.data.refreshToken).toBeDefined();
     })
 
     it('Should return max 10 users', async () => {
         const res = await request(app).get('/api/v1/users').set('Authorization', `Bearer ${token}`);
+
+        if(roleId !== 3) {
         expect(res.status).toBe(200);
         expect(res.body.data).toBeDefined();
         expect(res.body.data.length).toBeGreaterThan(0);
         expect(res.body.data.length).toBeLessThanOrEqual(10);
+        } else {
+        expect(res.status).toBe(401);
+        }
+
     });
 
     it("Should not returning password", async () => {
         const res = await request(app).get('/api/v1/users').set('Authorization', `Bearer ${token}`);
+
+        if(roleId !== 3) {
         expect(res.status).toBe(200);
         expect(res.body.data).toBeDefined();
         expect(res.body.data[0].password).toBeUndefined();
+        }else {
+            expect(res.status).toBe(401);
+        }
     })
 
     // Stop server and disconnect Prisma after tests
