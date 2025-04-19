@@ -1,5 +1,4 @@
 import { ProductRepository } from '../../adapters/repositories/product.repository';
-import { Product } from '@prisma/client';
 import {
 	CreateProductProps,
 	DeleteProductProps,
@@ -9,6 +8,7 @@ import {
 	ProductUseCases,
 	UpdateProductProps,
 } from '../interfaces/product.interface';
+import {Product} from "@prisma/client";
 
 export class ProductInteractor implements ProductUseCases {
 	private repository: ProductRepository;

@@ -7,7 +7,7 @@
 		"test": "cross-env NODE_ENV=test jest --testTimeout=5000",
 		"build": "tsc",
 		"start": "npm run build && node dist/index.js",
-		"dev": "npx nodemon"
+		"dev": "npx nodemon --watch src"
 	},
 	"prisma": {
 		"seed": "ts-node prisma/seed.ts"
